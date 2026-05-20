@@ -24,6 +24,7 @@
 #include "items/powerup_manager.hpp"
 #include "karts/moveable.hpp"
 #include "karts/controller/kart_control.hpp"
+#include "karts/team_kart_roster.hpp"
 #include "race/race_manager.hpp"
 
 namespace irr
@@ -78,6 +79,9 @@ private:
     /** Name of the kart with translation. */
     core::stringw m_name;
 
+    /** Optional two-rider roster for Double Dash-style karts. */
+    TeamKartRoster m_team_roster;
+
     // ------------------------------------------------------------------------
     void loadKartProperties(const std::string& new_ident,
                             HandicapLevel handicap,
@@ -120,6 +124,15 @@ public:
     // ------------------------------------------------------------------------
     /** Returns a name to be displayed for this kart. */
     const core::stringw& getName() const                     { return m_name; }
+    // ------------------------------------------------------------------------
+    /** Returns the two-rider roster for this kart. */
+    const TeamKartRoster& getTeamRoster() const { return m_team_roster; }
+    // ------------------------------------------------------------------------
+    /** Returns the two-rider roster for this kart, non-const version. */
+    TeamKartRoster& getTeamRoster() { return m_team_roster; }
+    // ------------------------------------------------------------------------
+    /** Swaps front/rear riders if this kart has a configured pair. */
+    void swapTeamRiders() { m_team_roster.swapRiders(); }
     // ------------------------------------------------------------------------
     virtual void   reset();
     virtual void   init(RaceManager::KartType type) = 0;

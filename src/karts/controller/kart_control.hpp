@@ -51,6 +51,8 @@ private:
     bool  m_fire;
     /** True if the kart looks (and shoots) backwards. */
     bool  m_look_back;
+    /** True if the kart requests front/rear rider swap. */
+    bool  m_swap_riders;
 public:
     void setSteer(float f);
     void setAccel(float f);
@@ -60,6 +62,7 @@ public:
     void setRescue(bool b);
     void setFire(bool b);
     void setLookBack(bool b);
+    void setSwapRiders(bool b);
 
     // ------------------------------------------------------------------------
     KartControl()
@@ -78,6 +81,7 @@ public:
         m_rescue    = false;
         m_fire      = false;
         m_look_back = false;
+        m_swap_riders = false;
     }   // reset
     // ------------------------------------------------------------------------
     /** Tests if two KartControls are equal.
@@ -91,7 +95,8 @@ public:
                m_skid      == other.m_skid    &&
                m_rescue    == other.m_rescue  &&
                m_fire      == other.m_fire    &&
-               m_look_back == other.m_look_back;
+               m_look_back == other.m_look_back &&
+               m_swap_riders == other.m_swap_riders;
     }    // operator==
     // ------------------------------------------------------------------------
     /** Copies the important data from this objects into a memory buffer. */
@@ -108,6 +113,7 @@ public:
               + (m_rescue    ?  4 : 0)
               + (m_fire      ?  8 : 0)
               + (m_look_back ? 16 : 0)
+              + (m_swap_riders ? 128 : 0)
               + (m_skid<<5);             // m_skid is in {0,1,2,3}
     }   // getButtonsCompressed
     // ------------------------------------------------------------------------
@@ -121,6 +127,7 @@ public:
         m_rescue    = (c &  4) != 0;
         m_fire      = (c &  8) != 0;
         m_look_back = (c & 16) != 0;
+        m_swap_riders = (c & 128) != 0;
         m_skid      = (SkidControl)((c & 96) >> 5);
     }   // setButtonsCompressed
     // ------------------------------------------------------------------------
@@ -150,6 +157,9 @@ public:
     /** Returns if the kart wants to look back (which also implies that it
      *  will fire backwards. */
     bool getLookBack() const { return m_look_back; }
+    // ------------------------------------------------------------------------
+    /** Returns if the kart wants to swap its active front/rear riders. */
+    bool getSwapRiders() const { return m_swap_riders; }
 };
 
 #endif
