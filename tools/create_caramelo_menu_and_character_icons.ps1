@@ -137,6 +137,33 @@ function Draw-CharacterIcon([hashtable]$c) {
     $bitmap.Dispose()
 }
 
+function Import-CharacterIcon([hashtable]$c) {
+    if (-not $c.Source -or -not (Test-Path -LiteralPath $c.Source)) {
+        Draw-CharacterIcon $c
+        return
+    }
+
+    $source = [System.Drawing.Image]::FromFile($c.Source)
+    $side = [Math]::Min($source.Width, $source.Height)
+    $x = [Math]::Floor(($source.Width - $side) / 2)
+    $y = [Math]::Floor(($source.Height - $side) / 2)
+    $bitmap = New-Bitmap 512 512
+    $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
+    $graphics.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::HighQuality
+    $graphics.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
+    $graphics.PixelOffsetMode = [System.Drawing.Drawing2D.PixelOffsetMode]::HighQuality
+    $graphics.DrawImage(
+        $source,
+        (New-Object System.Drawing.Rectangle 0, 0, 512, 512),
+        (New-Object System.Drawing.Rectangle $x, $y, $side, $side),
+        [System.Drawing.GraphicsUnit]::Pixel)
+
+    $graphics.Dispose()
+    Save-Png $bitmap (Join-Path $characterRoot ($c.Id + ".png"))
+    $bitmap.Dispose()
+    $source.Dispose()
+}
+
 function Draw-PowerIcon([string]$file, [string]$label, [int[]]$color) {
     $bitmap = New-Bitmap 256 256
     $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
@@ -175,27 +202,14 @@ Draw-TireIcon "speed_100.png" "100" @(42, 202, 72)
 Draw-TireIcon "speed_150.png" "150" @(235, 58, 42)
 
 $characters = @(
-    @{ Id="favela"; Label="Favela"; Kind="dog"; Face=@(218,126,38); Bg=@(0,138,72); Accent=@(55,35,20); Stripes=$false },
-    @{ Id="atho"; Label="Atho"; Kind="cat"; Face=@(24,24,26); Bg=@(240,172,35); Accent=@(210,20,20); Stripes=$false },
-    @{ Id="nina"; Label="Nina"; Kind="dog"; Face=@(139,86,43); Bg=@(30,116,190); Accent=@(55,35,20); Stripes=$false },
-    @{ Id="popo"; Label="Popo"; Kind="cat"; Face=@(168,116,70); Bg=@(245,148,40); Accent=@(70,42,20); Stripes=$true },
-    @{ Id="vira_lata_preto"; Label="Vira"; Kind="dog"; Face=@(30,30,32); Bg=@(65,160,75); Accent=@(235,175,45); Stripes=$false },
-    @{ Id="gato_rajado"; Label="Rajado"; Kind="cat"; Face=@(160,112,72); Bg=@(75,150,215); Accent=@(70,42,20); Stripes=$true },
-    @{ Id="capivara"; Label="Capivara"; Kind="long"; Face=@(154,103,55); Bg=@(45,155,80); Accent=@(92,58,31); Stripes=$false },
-    @{ Id="tucano"; Label="Tucano"; Kind="bird"; Face=@(18,18,20); Bg=@(45,170,220); Accent=@(255,150,28); Stripes=$false },
-    @{ Id="arara"; Label="Arara"; Kind="bird"; Face=@(35,92,210); Bg=@(255,205,35); Accent=@(255,180,40); Stripes=$false },
-    @{ Id="onca"; Label="Onca"; Kind="cat"; Face=@(221,156,55); Bg=@(62,142,67); Accent=@(38,28,18); Stripes=$true },
-    @{ Id="lobo_guara"; Label="Lobo"; Kind="dog"; Face=@(211,92,36); Bg=@(35,130,190); Accent=@(30,24,20); Stripes=$false },
-    @{ Id="tamandua"; Label="Tamandua"; Kind="long"; Face=@(128,98,70); Bg=@(230,170,50); Accent=@(42,34,28); Stripes=$false },
-    @{ Id="quati"; Label="Quati"; Kind="long"; Face=@(148,94,46); Bg=@(48,155,95); Accent=@(235,220,160); Stripes=$true },
-    @{ Id="mico_leao"; Label="Mico"; Kind="dog"; Face=@(236,135,30); Bg=@(35,145,208); Accent=@(255,205,60); Stripes=$false },
-    @{ Id="jacare"; Label="Jacare"; Kind="long"; Face=@(43,124,57); Bg=@(242,185,45); Accent=@(18,82,35); Stripes=$false },
-    @{ Id="preguica"; Label="Preguica"; Kind="dog"; Face=@(135,105,75); Bg=@(85,160,85); Accent=@(235,224,190); Stripes=$false },
-    @{ Id="tatu_bola"; Label="Tatu"; Kind="dog"; Face=@(122,105,91); Bg=@(225,150,55); Accent=@(82,70,60); Stripes=$true }
+    @{ Id="favela"; Label="Favela"; Kind="dog"; Face=@(218,126,38); Bg=@(0,138,72); Accent=@(55,35,20); Stripes=$false; Source="$env:USERPROFILE\Downloads\Favela.png" },
+    @{ Id="atho"; Label="Atho"; Kind="cat"; Face=@(24,24,26); Bg=@(240,172,35); Accent=@(210,20,20); Stripes=$false; Source="$env:USERPROFILE\Downloads\Atho.png" },
+    @{ Id="nina"; Label="Nina"; Kind="dog"; Face=@(139,86,43); Bg=@(30,116,190); Accent=@(55,35,20); Stripes=$false; Source="$env:USERPROFILE\Downloads\Nina.png" },
+    @{ Id="popo"; Label="Popo"; Kind="cat"; Face=@(168,116,70); Bg=@(245,148,40); Accent=@(70,42,20); Stripes=$true; Source="$env:USERPROFILE\Downloads\Popo.png" }
 )
 
 foreach ($character in $characters) {
-    Draw-CharacterIcon $character
+    Import-CharacterIcon $character
 }
 
 Draw-PowerIcon "zipper_collect.png" "TURBO" @(255, 126, 18)

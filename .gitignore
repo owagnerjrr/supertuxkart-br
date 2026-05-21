@@ -78,6 +78,7 @@ android-*
 android/sdk-packages.txt
 *.apk
 *.keystore
+apk-output-*/
 
 dependencies-android-src.tar.xz
 

@@ -31,10 +31,9 @@ The initial roster is based on the supplied reference photos:
 | Ident | Name | Type | Visual direction | Gameplay direction |
 | --- | --- | --- | --- | --- |
 | `atho` | Atho | Cat | Black cat, yellow eyes, red collar | Tight handling and quick short acceleration |
-| `popo` | Popo | Cat | Three-color tabby/calico coat | Balanced beginner-friendly racer |
+| `popo` | Popo | Cat | Three-color tabby/calico coat | Heavier, stable beginner-friendly racer |
 | `favela` | Favela | Dog | Caramel dog with white chest | Mascot racer with strong top speed |
 | `nina` | Nina | Dog | Larger dog with darker coat and collar | Stable, heavier, good item presence |
-| `mathias` | Mathias | Dog | Darker poodle with curly coat | Technical racer, drift and recovery focused |
 
 The code seed for this roster lives in:
 
@@ -93,4 +92,3 @@ Initial control target:
 6. Map swap-rider input to `KartControl::setSwapRiders`.
 7. Hook item pickup/use logic into the two rider slots.
 8. Build a first Android APK after each visible step.
-

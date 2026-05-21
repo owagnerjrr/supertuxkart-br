@@ -16,21 +16,33 @@ $characters = @(
     @{ Id = "favela";          Source = "tux";     Name = "Favela";          Type = "medium"; Color = "0.92 0.47 0.05" },
     @{ Id = "atho";            Source = "kiki";    Name = "Atho";            Type = "light";  Color = "0.02 0.02 0.02" },
     @{ Id = "nina";            Source = "puffy";   Name = "Nina";            Type = "heavy";  Color = "0.58 0.36 0.18" },
-    @{ Id = "popo";            Source = "kiki";    Name = "Popo";            Type = "light";  Color = "0.64 0.46 0.28" },
-    @{ Id = "vira_lata_preto"; Source = "tux";     Name = "Vira-lata Preto"; Type = "medium"; Color = "0.04 0.04 0.04" },
-    @{ Id = "gato_rajado";     Source = "kiki";    Name = "Gato Rajado";     Type = "light";  Color = "0.62 0.42 0.24" },
-    @{ Id = "capivara";        Source = "puffy";   Name = "Capivara";        Type = "heavy";  Color = "0.46 0.30 0.16" },
-    @{ Id = "tucano";          Source = "gnu";     Name = "Tucano";          Type = "medium"; Color = "0.02 0.30 0.70" },
-    @{ Id = "arara";           Source = "konqi";   Name = "Arara";           Type = "medium"; Color = "0.00 0.26 0.78" },
-    @{ Id = "onca";            Source = "beastie"; Name = "Onca";            Type = "heavy";  Color = "0.95 0.62 0.12" },
-    @{ Id = "lobo_guara";      Source = "xue";     Name = "Lobo-guara";      Type = "medium"; Color = "0.88 0.34 0.08" },
-    @{ Id = "tamandua";        Source = "pidgin";  Name = "Tamandua";        Type = "heavy";  Color = "0.35 0.26 0.18" },
-    @{ Id = "quati";           Source = "wilber";  Name = "Quati";           Type = "light";  Color = "0.52 0.34 0.14" },
-    @{ Id = "mico_leao";       Source = "hexley";  Name = "Mico-leao";       Type = "light";  Color = "0.96 0.52 0.04" },
-    @{ Id = "jacare";          Source = "amanda";  Name = "Jacare";          Type = "heavy";  Color = "0.10 0.36 0.12" },
-    @{ Id = "preguica";        Source = "emule";   Name = "Preguica";        Type = "medium"; Color = "0.55 0.42 0.24" },
-    @{ Id = "tatu_bola";       Source = "adiumy";  Name = "Tatu-bola";       Type = "medium"; Color = "0.42 0.34 0.28" }
+    @{ Id = "popo";            Source = "kiki";    Name = "Popo";            Type = "heavy";  Color = "0.64 0.46 0.28" }
 )
+
+$obsoleteCharacters = @(
+    "vira_lata_preto",
+    "gato_rajado",
+    "capivara",
+    "tucano",
+    "arara",
+    "onca",
+    "lobo_guara",
+    "tamandua",
+    "quati",
+    "mico_leao",
+    "jacare",
+    "preguica",
+    "tatu_bola",
+    "mathias"
+)
+
+foreach ($obsolete in $obsoleteCharacters) {
+    $target = Join-Path $kartsRoot $obsolete
+    if (Test-Path -LiteralPath $target) {
+        Remove-Item -LiteralPath $target -Recurse -Force
+        Write-Host "Removed obsolete Caramelo Dash kart $obsolete."
+    }
+}
 
 foreach ($character in $characters) {
     $source = Join-Path $kartsRoot $character.Source

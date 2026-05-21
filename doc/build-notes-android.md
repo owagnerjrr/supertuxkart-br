@@ -108,7 +108,7 @@ inside the sibling `stk-assets` checkout:
 ```bash
 cd /mnt/c/Users/owagn/Documents/Codex/2026-05-20/codex-estou-continuando-o-projeto-supertuxkart/supertuxkart-br/android
 
-export KARTS='atho popo favela nina mathias'
+export KARTS='atho popo favela nina'
 export TRACKS=abyss
 export RUN_OPTIMIZE_SCRIPT=0
 export DECREASE_QUALITY=1

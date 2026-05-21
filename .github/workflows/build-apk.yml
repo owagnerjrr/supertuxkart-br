@@ -69,20 +69,7 @@ jobs:
               ("favela", "tux", "Favela", "medium", "0.92 0.47 0.05"),
               ("atho", "kiki", "Atho", "light", "0.02 0.02 0.02"),
               ("nina", "puffy", "Nina", "heavy", "0.58 0.36 0.18"),
-              ("popo", "kiki", "Popo", "light", "0.64 0.46 0.28"),
-              ("vira_lata_preto", "tux", "Vira-lata Preto", "medium", "0.04 0.04 0.04"),
-              ("gato_rajado", "kiki", "Gato Rajado", "light", "0.62 0.42 0.24"),
-              ("capivara", "puffy", "Capivara", "heavy", "0.46 0.30 0.16"),
-              ("tucano", "gnu", "Tucano", "medium", "0.02 0.30 0.70"),
-              ("arara", "konqi", "Arara", "medium", "0.00 0.26 0.78"),
-              ("onca", "beastie", "Onca", "heavy", "0.95 0.62 0.12"),
-              ("lobo_guara", "xue", "Lobo-guara", "medium", "0.88 0.34 0.08"),
-              ("tamandua", "pidgin", "Tamandua", "heavy", "0.35 0.26 0.18"),
-              ("quati", "wilber", "Quati", "light", "0.52 0.34 0.14"),
-              ("mico_leao", "hexley", "Mico-leao", "light", "0.96 0.52 0.04"),
-              ("jacare", "amanda", "Jacare", "heavy", "0.10 0.36 0.12"),
-              ("preguica", "emule", "Preguica", "medium", "0.55 0.42 0.24"),
-              ("tatu_bola", "adiumy", "Tatu-bola", "medium", "0.42 0.34 0.28"),
+              ("popo", "kiki", "Popo", "heavy", "0.64 0.46 0.28"),
           ]
 
           for ident, source, name, kart_type, rgb in characters:
@@ -120,7 +107,7 @@ jobs:
       - name: Generate Android assets
         working-directory: android
         env:
-          KARTS: "favela atho nina popo vira_lata_preto gato_rajado capivara tucano arara onca lobo_guara tamandua quati mico_leao jacare preguica tatu_bola"
+          KARTS: "favela atho nina popo"
           TRACKS: "black_forest cocoa_temple cornfield_crossing gran_paradiso_island hacienda mines minigolf ravenbridge_mansion sandtrack scotland snowmountain volcano_island"
           RUN_OPTIMIZE_SCRIPT: "0"
           DECREASE_QUALITY: "1"
