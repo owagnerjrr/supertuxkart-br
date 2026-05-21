@@ -1,0 +1,133 @@
+name: build-apk
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-debug-apk:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 120
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          submodules: true
+
+      - name: Install Linux packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential autoconf automake cmake git \
+            subversion python3 unzip zip imagemagick vorbis-tools pngquant \
+            advancecomp optipng libjpeg-turbo-progs xz-utils openjdk-21-jdk \
+            gradle dos2unix meson ninja-build ccache glslang-tools python3-mako \
+            python3-ply python3-yaml pkg-config bison byacc flex
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages
+        run: |
+          yes | sdkmanager --licenses >/dev/null
+          sdkmanager "platform-tools" "platforms;android-35" \
+            "build-tools;35.0.0" "build-tools;34.0.0" "ndk;23.1.7779620"
+
+      - name: Fetch STK assets
+        run: |
+          set -e
+          cd ..
+          for attempt in 1 2 3 4 5; do
+            if [ -d stk-assets/.svn ]; then
+              svn cleanup stk-assets || true
+              svn update --quiet stk-assets && exit 0
+            else
+              rm -rf stk-assets
+              svn checkout --quiet https://svn.code.sf.net/p/supertuxkart/code/stk-assets stk-assets && exit 0
+            fi
+            echo "SVN assets fetch failed on attempt ${attempt}; retrying..."
+            sleep 10
+          done
+          exit 1
+
+      - name: Create placeholder Caramelo Dash karts
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import shutil
+          import xml.etree.ElementTree as ET
+
+          assets = Path("../stk-assets").resolve()
+          karts = assets / "karts"
+          characters = [
+              ("atho", "puffy", "Atho", "light", "0.04 0.04 0.04"),
+              ("popo", "suzanne", "Popo", "heavy", "0.95 0.64 0.35"),
+              ("favela", "tux", "Favela", "heavy", "0.78 0.39 0.12"),
+              ("nina", "beastie", "Nina", "heavy", "0.34 0.24 0.18"),
+              ("mathias", "wilber", "Mathias", "medium", "0.18 0.14 0.12"),
+          ]
+
+          for ident, source, name, kart_type, rgb in characters:
+              src = karts / source
+              dst = karts / ident
+              if dst.exists():
+                  shutil.rmtree(dst)
+              shutil.copytree(src, dst)
+
+              kart_xml = dst / "kart.xml"
+              tree = ET.parse(kart_xml)
+              root = tree.getroot()
+              root.set("name", name)
+              root.set("type", kart_type)
+              root.set("rgb", rgb)
+              tree.write(kart_xml, encoding="utf-8", xml_declaration=True)
+              print(f"Prepared {name} from {source}")
+          PY
+
+      - name: Fetch Android dependency sources
+        run: |
+          curl -L --retry 5 -o dependencies-android-src.tar.xz \
+            https://github.com/supertuxkart/dependencies/releases/download/preview/dependencies-android-src.tar.xz
+          tar -C lib -xf dependencies-android-src.tar.xz
+          rm -rf lib/libadrenotools/lib/linkernsbypass
+          git clone --depth 1 https://github.com/bylaws/liblinkernsbypass.git \
+            lib/libadrenotools/lib/linkernsbypass
+
+      - name: Generate minimal Android assets
+        working-directory: android
+        env:
+          KARTS: "atho popo favela nina mathias"
+          TRACKS: "abyss"
+          RUN_OPTIMIZE_SCRIPT: "0"
+          DECREASE_QUALITY: "1"
+          COMPILE_ARCH: "aarch64"
+          BUILD_TYPE: "debug"
+        run: bash ./generate_assets.sh
+
+      - name: Build Android dependencies
+        working-directory: android
+        env:
+          NDK_PATH: ${{ env.ANDROID_HOME }}/ndk
+          STK_NDK_VERSION: "23.1.7779620"
+          COMPILE_ARCH: "aarch64"
+          BUILD_TYPE: "debug"
+        run: bash ./make_deps.sh
+
+      - name: Build debug APK
+        working-directory: android
+        env:
+          SDK_PATH: ${{ env.ANDROID_HOME }}
+          NDK_PATH: ${{ env.ANDROID_HOME }}/ndk
+          STK_NDK_VERSION: "23.1.7779620"
+          STK_TARGET_ANDROID_SDK: "35"
+          STK_MIN_ANDROID_SDK: "21"
+          COMPILE_ARCH: "aarch64"
+          BUILD_TYPE: "debug"
+        run: bash ./make.sh
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: caramelo-dash-debug-apk
+          path: android/build/outputs/apk/debug/android-debug.apk
+          if-no-files-found: error
+
