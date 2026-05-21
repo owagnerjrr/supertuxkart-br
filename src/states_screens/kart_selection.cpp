@@ -41,6 +41,7 @@
 #include "modes/overworld.hpp"
 #include "network/network_config.hpp"
 #include "states_screens/race_setup_screen.hpp"
+#include "states_screens/tracks_and_gp_screen.hpp"
 #include "utils/log.hpp"
 #include "utils/random_generator.hpp"
 #include "utils/string_utils.hpp"
@@ -1306,7 +1307,7 @@ void KartSelectionScreen::allPlayersDone()
     }
     else
     {
-        RaceSetupScreen::getInstance()->push();
+        TracksAndGPScreen::getInstance()->push();
     }
 }   // allPlayersDone
 

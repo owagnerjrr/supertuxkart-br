@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <stkgui>
     <div x="0" y="0" width="100%" height="100%" layout="vertical-row" >
-        <spacer width="10" height="6%"/>
-        <header id="logo" align="center" width="90%" height="20%"
-                text="Caramelo Dash" text_align="center"/>
-        <spacer width="10" height="4%"/>
+        <spacer width="10" height="2%"/>
+        <icon id="logo" align="center" width="94%" height="54%" icon="gui/icons/caramelo_dash.png"/>
+        <spacer width="10" height="2%"/>
 
-        <buttonbar id="menu_toprow" proportion="3" width="70%" align="center">
+        <buttonbar id="menu_toprow" proportion="3" width="62%" align="center">
             <icon-button id="new" width="128" height="128"
                          icon="gui/icons/menu_race.png" focus_icon="gui/icons/menu_race_focus.png"
-                         I18N="Main menu button" text="Race" word_wrap="true"/>
+                         I18N="Main menu button" text="Jogar" word_wrap="true"/>
             <icon-button id="online" width="1" height="1" visible="false"
                          icon="gui/icons/menu_online.png" focus_icon="gui/icons/menu_online_focus.png"
                          I18N="Main menu button" text="Online" label_location="hover"/>

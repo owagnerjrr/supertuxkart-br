@@ -1,5 +1,5 @@
 
-<supertuxkart_grand_prix name="At World's End">
+<supertuxkart_grand_prix name="Copa Ipe Dourado">
 
     <track id="minigolf"       laps="4" reverse="false" />
     <track id="black_forest"    laps="3" reverse="false" />

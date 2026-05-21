@@ -12,11 +12,19 @@ if (-not (Test-Path -LiteralPath $kartsRoot)) {
 }
 
 $characters = @(
-    @{ Id = "atho";    Source = "puffy";   Name = "Atho";    Type = "light";  Color = "0.04 0.04 0.04" },
-    @{ Id = "popo";    Source = "suzanne"; Name = "Popo";    Type = "heavy";  Color = "0.95 0.64 0.35" },
-    @{ Id = "favela";  Source = "tux";     Name = "Favela";  Type = "heavy";  Color = "0.78 0.39 0.12" },
-    @{ Id = "nina";    Source = "beastie"; Name = "Nina";    Type = "heavy";  Color = "0.34 0.24 0.18" },
-    @{ Id = "mathias"; Source = "wilber";  Name = "Mathias"; Type = "medium"; Color = "0.18 0.14 0.12" }
+    @{ Id = "vira_lata_preto"; Source = "tux";     Name = "Vira-lata Preto"; Type = "medium"; Color = "0.04 0.04 0.04" },
+    @{ Id = "gato_rajado";     Source = "kiki";    Name = "Gato Rajado";     Type = "light";  Color = "0.62 0.42 0.24" },
+    @{ Id = "capivara";        Source = "puffy";   Name = "Capivara";        Type = "heavy";  Color = "0.46 0.30 0.16" },
+    @{ Id = "tucano";          Source = "gnu";     Name = "Tucano";          Type = "medium"; Color = "0.02 0.30 0.70" },
+    @{ Id = "arara";           Source = "konqi";   Name = "Arara";           Type = "medium"; Color = "0.00 0.26 0.78" },
+    @{ Id = "onca";            Source = "beastie"; Name = "Onca";            Type = "heavy";  Color = "0.95 0.62 0.12" },
+    @{ Id = "lobo_guara";      Source = "xue";     Name = "Lobo-guara";      Type = "medium"; Color = "0.88 0.34 0.08" },
+    @{ Id = "tamandua";        Source = "pidgin";  Name = "Tamandua";        Type = "heavy";  Color = "0.35 0.26 0.18" },
+    @{ Id = "quati";           Source = "wilber";  Name = "Quati";           Type = "light";  Color = "0.52 0.34 0.14" },
+    @{ Id = "mico_leao";       Source = "hexley";  Name = "Mico-leao";       Type = "light";  Color = "0.96 0.52 0.04" },
+    @{ Id = "jacare";          Source = "amanda";  Name = "Jacare";          Type = "heavy";  Color = "0.10 0.36 0.12" },
+    @{ Id = "preguica";        Source = "emule";   Name = "Preguica";        Type = "medium"; Color = "0.55 0.42 0.24" },
+    @{ Id = "tatu_bola";       Source = "adiumy";  Name = "Tatu-bola";       Type = "medium"; Color = "0.42 0.34 0.28" }
 )
 
 foreach ($character in $characters) {

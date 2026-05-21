@@ -54,6 +54,7 @@
 #include "states_screens/online/online_profile_servers.hpp"
 #include "states_screens/online/online_screen.hpp"
 #include "states_screens/options/options_screen_general.hpp"
+#include "states_screens/race_setup_screen.hpp"
 #include "states_screens/state_manager.hpp"
 #include "states_screens/options/user_screen.hpp"
 #if DEBUG_MENU_ITEM
@@ -538,10 +539,7 @@ void MainMenuScreen::eventCallback(Widget* widget, const std::string& name,
     if (selection == "new")
     {
         NetworkConfig::get()->unsetNetworking();
-        KartSelectionScreen* s = OfflineKartSelectionScreen::getInstance();
-        s->setMultiplayer(false);
-        s->setFromOverworld(false);
-        s->push();
+        RaceSetupScreen::getInstance()->push();
     }
     else if (selection == "multiplayer")
     {

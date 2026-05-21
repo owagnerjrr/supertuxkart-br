@@ -24,7 +24,17 @@ public:
     enum Species
     {
         SPECIES_CAT,
-        SPECIES_DOG
+        SPECIES_DOG,
+        SPECIES_CAPYBARA,
+        SPECIES_BIRD,
+        SPECIES_JAGUAR,
+        SPECIES_MANED_WOLF,
+        SPECIES_ANTEATER,
+        SPECIES_COATI,
+        SPECIES_MONKEY,
+        SPECIES_CAIMAN,
+        SPECIES_SLOTH,
+        SPECIES_ARMADILLO
     };
 
     struct Character

@@ -80,8 +80,44 @@ function Draw-Brake {
     $bitmap.Dispose()
 }
 
+function Draw-Drift {
+    $bitmap = New-IconBitmap
+    $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
+    $graphics.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
+    $graphics.Clear([System.Drawing.Color]::Transparent)
+
+    $orange = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(255, 255, 126, 16))
+    $gold = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(255, 255, 210, 45))
+    $white = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::White)
+    $dark = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(220, 70, 24, 0))
+    $outline = New-Pen ([System.Drawing.Color]::FromArgb(240, 110, 40, 0)) 10
+    $arc = New-Pen ([System.Drawing.Color]::White) 14
+
+    $graphics.FillEllipse($dark, 23, 30, 210, 198)
+    $graphics.FillEllipse($orange, 18, 22, 210, 198)
+    $graphics.FillEllipse($gold, 40, 38, 168, 140)
+    $graphics.DrawEllipse($outline, 18, 22, 210, 198)
+    $graphics.DrawArc($arc, 61, 60, 135, 100, 205, 245)
+
+    $font = New-Object System.Drawing.Font "Arial", 44, ([System.Drawing.FontStyle]::Bold)
+    $format = New-Object System.Drawing.StringFormat
+    $format.Alignment = [System.Drawing.StringAlignment]::Center
+    $format.LineAlignment = [System.Drawing.StringAlignment]::Center
+    $rect = New-Object System.Drawing.RectangleF 20, 76, 210, 80
+    $graphics.DrawString("DRIFT", $font, $dark, $rect, $format)
+    $rect.Y -= 5
+    $graphics.DrawString("DRIFT", $font, $white, $rect, $format)
+
+    $orange.Dispose(); $gold.Dispose(); $white.Dispose(); $dark.Dispose()
+    $outline.Dispose(); $arc.Dispose(); $font.Dispose(); $format.Dispose()
+    $graphics.Dispose()
+    Save-Icon $bitmap "drift.png"
+    $bitmap.Dispose()
+}
+
 Draw-Arrow "left_arrow.png" "left"
 Draw-Arrow "right_arrow.png" "right"
 Draw-Brake
+Draw-Drift
 
 Write-Host "Speed Drifters touch icons generated."

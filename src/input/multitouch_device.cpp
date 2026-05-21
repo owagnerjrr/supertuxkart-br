@@ -135,6 +135,9 @@ void MultitouchDevice::addButton(MultitouchButtonType type, int x, int y,
     case MultitouchButtonType::BUTTON_RIGHT:
         button->action = PA_STEER_RIGHT;
         break;
+    case MultitouchButtonType::BUTTON_SWAP_RIDERS:
+        button->action = PA_BEFORE_FIRST;
+        break;
     default:
         button->action = PA_BEFORE_FIRST;
         break;
@@ -161,6 +164,7 @@ void MultitouchDevice::clearButtons()
  */
 void MultitouchDevice::reset()
 {
+    m_swap_riders_was_pressed = false;
     for (MultitouchButton* button : m_buttons)
     {
         button->pressed = false;
@@ -692,11 +696,17 @@ void MultitouchDevice::updateController()
     }
 
     m_controller = pk->getController();
+    bool swap_pressed = false;
     if (UserConfigParams::m_multitouch_auto_acceleration)
     {
         bool braking = false;
         for (MultitouchButton* button : m_buttons)
         {
+            if (button && button->type == MultitouchButtonType::BUTTON_SWAP_RIDERS &&
+                button->pressed)
+            {
+                swap_pressed = true;
+            }
             if (button && button->type == MultitouchButtonType::BUTTON_DOWN &&
                 button->pressed)
             {
@@ -706,6 +716,22 @@ void MultitouchDevice::updateController()
         }
         m_controller->action(PA_ACCEL, braking ? 0 : Input::MAX_VALUE);
     }
+    else
+    {
+        for (MultitouchButton* button : m_buttons)
+        {
+            if (button && button->type == MultitouchButtonType::BUTTON_SWAP_RIDERS &&
+                button->pressed)
+            {
+                swap_pressed = true;
+                break;
+            }
+        }
+    }
+
+    if (swap_pressed && !m_swap_riders_was_pressed)
+        pk->swapTeamRiders();
+    m_swap_riders_was_pressed = swap_pressed;
 }
 
 // ----------------------------------------------------------------------------

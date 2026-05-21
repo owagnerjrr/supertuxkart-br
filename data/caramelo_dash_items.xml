@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<caramelo-dash-items>
+  <item id="casca-de-banana" role="trap" base="bubblegum" effect="Drops a track hazard that spins the next kart that hits it."/>
+  <item id="casca-gigante" role="special-trap" base="bubblegum" effect="Drops a larger hazard; when hit, it scatters smaller hazards."/>
+  <item id="casco-verde" role="straight-projectile" base="bowling" effect="Fires a straight projectile that bounces and knocks rivals."/>
+  <item id="casco-vermelho" role="homing-projectile" base="cake" effect="Targets the next rival ahead and explodes on contact."/>
+  <item id="casco-azul" role="leader-projectile" base="rubber-ball" effect="Targets the leader and explodes in an area."/>
+  <item id="caixa-falsa" role="fake-box" base="bubblegum" effect="Looks like a pickup but stops and spins whoever touches it."/>
+  <item id="turbo" role="boost" base="zipper" effect="Gives one short speed boost."/>
+  <item id="turbo-triplo" role="multi-boost" base="zipper" count="3" effect="Gives three stored boosts."/>
+  <item id="estrela-da-mata" role="invincibility" base="swatter" effect="Temporary protection, speed increase and contact attack."/>
+  <item id="raio-tropical" role="global-attack" base="parachute" effect="Slows and disrupts rivals ahead."/>
+  <item id="bolas-de-fogo" role="spread-projectile" base="bowling" count="5" effect="Throws a spread of small projectiles."/>
+  <item id="coracao" role="shield" base="bubblegum" effect="Protects against the next hit."/>
+  <item id="ovo-da-floresta" role="homing-drop" base="cake" effect="Homes like a projectile and drops smaller items on impact."/>
+  <item id="corrente-de-guia" role="pull-boost" base="plunger" effect="Pulls the kart forward and disrupts anything in the way."/>
+  <item id="turbo-dourado" role="timed-boost" base="zipper" effect="Allows repeated boosts for a short time."/>
+  <item id="cascos-triplos" role="multi-projectile" base="bowling" count="3" effect="Stores three projectiles."/>
+  <item id="casco-pesado" role="large-projectile" base="bowling" effect="Launches a large bouncing projectile."/>
+  <item id="bomba-de-fruta" role="explosive" base="rubber-ball" effect="Explodes near rivals and throws them upward."/>
+  <item id="especial-surpresa" role="random-special" base="switch" effect="Rolls one of the stronger special items."/>
+</caramelo-dash-items>

@@ -476,7 +476,7 @@ namespace UserConfigParams
                             "the leader, 3=3 strikes, 4=easter egg hunt, "
                             "5=soccer, 6=ghost replay") );
     PARAM_PREFIX StringUserConfigParam m_default_kart
-            PARAM_DEFAULT( StringUserConfigParam("tux", "kart",
+            PARAM_DEFAULT( StringUserConfigParam("vira_lata_preto", "kart",
                            "Kart to select by default (the last used kart)") );
     PARAM_PREFIX StringUserConfigParam m_last_used_kart_group
             PARAM_DEFAULT( StringUserConfigParam("all", "last_kart_group",

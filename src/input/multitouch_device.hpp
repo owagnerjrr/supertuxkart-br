@@ -44,6 +44,7 @@ enum MultitouchButtonType
     BUTTON_DOWN,
     BUTTON_LEFT,
     BUTTON_RIGHT,
+    BUTTON_SWAP_RIDERS,
     BUTTON_CUSTOM
 };
 
@@ -93,6 +94,7 @@ private:
 
     float m_orientation;
     uint64_t m_gyro_time;
+    bool m_swap_riders_was_pressed;
 
     /** Pointer to the irrlicht device */
     IrrlichtDevice* m_irrlicht_device;

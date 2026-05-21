@@ -144,8 +144,7 @@ void TrackInfoScreen::init()
 
     //I18N: when showing who is the author of track '%s'
     //I18N: (place %s where the name of the author should appear)
-    getWidget<LabelWidget>("author")->setText( _("Track by %s", m_track->getDesigner()),
-                                               false );
+    getWidget<LabelWidget>("author")->setVisible(false);
 
     LabelWidget* max_players = getWidget<LabelWidget>("max-arena-players");
     max_players->setVisible(m_track->isArena());
@@ -185,8 +184,9 @@ void TrackInfoScreen::init()
          m_track->hasNavMesh() && (max_arena_players - local_players) > 0 :
          RaceManager::get()->hasAI());
 
-    m_ai_kart_spinner->setVisible(has_AI);
-    m_ai_kart_label->setVisible(has_AI);
+    const bool show_ai_setup = false;
+    m_ai_kart_spinner->setVisible(show_ai_setup);
+    m_ai_kart_label->setVisible(show_ai_setup);
 
     if (has_AI)
     {
@@ -201,8 +201,8 @@ void TrackInfoScreen::init()
 
         if (num_ai < 0) num_ai = 0;
         m_ai_kart_spinner->setValue(num_ai);
-
-        RaceManager::get()->setNumKarts(num_ai + local_players);
+        RaceManager::get()->setNumKarts(std::max(local_players + num_ai,
+            int(UserConfigParams::m_default_num_karts)));
 
         // Set the max karts supported based on the selected battle arena
         if( RaceManager::get()->isBattleMode() || m_is_soccer)

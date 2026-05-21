@@ -66,6 +66,7 @@ RaceGUIMultitouch::RaceGUIMultitouch(RaceGUIBase* race_gui)
     m_left_tex = NULL;
     m_right_tex = NULL;
     m_brake_tex = NULL;
+    m_swap_tex = NULL;
     m_screen_tex = NULL;
 
     m_device = input_manager->getDeviceManager()->getMultitouchDevice();
@@ -163,6 +164,7 @@ void RaceGUIMultitouch::init()
     m_left_tex = irr_driver->getTexture(FileManager::GUI_ICON, "android/left_arrow.png");
     m_right_tex = irr_driver->getTexture(FileManager::GUI_ICON, "android/right_arrow.png");
     m_brake_tex = irr_driver->getTexture(FileManager::GUI_ICON, "android/brake.png");
+    m_swap_tex = irr_driver->getTexture(FileManager::GUI_ICON, "swap-icon.png");
     m_screen_tex = irr_driver->getTexture(FileManager::GUI_ICON, "screen_other.png");
     m_steering_wheel_tex_mask_up = irr_driver->getTexture(FileManager::GUI_ICON,
                                         "android/steering_wheel_mask_up.png");
@@ -221,11 +223,12 @@ void RaceGUIMultitouch::createRaceGUI()
     const float steer_y = h - margin - steer_size;
     const float right_x = left_x + steer_size + margin * 0.2f;
 
-    const float item_x = w - 2.25f * col_size;
-    const float item_back_x = w - 1.2f * col_size;
+    const float item_x = w - 2.45f * col_size;
+    const float turbo_x = w - 1.28f * col_size;
     const float action_y = h - 1.35f * col_size;
     const float utility_y = h - 2.4f * col_size;
-    const float brake_x = w - 3.1f * col_size;
+    const float swap_x = w - 3.35f * col_size;
+    const float brake_x = w - 2.55f * col_size;
     const float drift_x = w - 1.55f * col_size;
 
     m_height = (unsigned int)(steer_size + margin * 2.0f);
@@ -246,9 +249,12 @@ void RaceGUIMultitouch::createRaceGUI()
     m_device->addButton(BUTTON_FIRE,
                         int(item_x), int(utility_y),
                         int(btn_size), int(btn_size));
-    m_device->addButton(BUTTON_FIRE_BACKWARDS,
-                        int(item_back_x), int(utility_y),
+    m_device->addButton(BUTTON_NITRO,
+                        int(turbo_x), int(utility_y),
                         int(btn_size), int(btn_size));
+    m_device->addButton(BUTTON_SWAP_RIDERS,
+                        int(swap_x), int(utility_y),
+                        int(btn_size * 0.82f), int(btn_size * 0.82f));
     m_device->addButton(BUTTON_DOWN,
                         int(brake_x), int(action_y),
                         int(btn_size), int(btn_size));
@@ -261,8 +267,9 @@ bool RaceGUIMultitouch::isSpeedDriftersButton(MultitouchButtonType type) const
            type == MultitouchButtonType::BUTTON_RIGHT ||
            type == MultitouchButtonType::BUTTON_DOWN ||
            type == MultitouchButtonType::BUTTON_FIRE ||
-           type == MultitouchButtonType::BUTTON_FIRE_BACKWARDS ||
-           type == MultitouchButtonType::BUTTON_SKIDDING;
+           type == MultitouchButtonType::BUTTON_NITRO ||
+           type == MultitouchButtonType::BUTTON_SKIDDING ||
+           type == MultitouchButtonType::BUTTON_SWAP_RIDERS;
 }
 
 //-----------------------------------------------------------------------------
@@ -491,6 +498,9 @@ void RaceGUIMultitouch::draw(const AbstractKart* kart,
                 break;
             case MultitouchButtonType::BUTTON_DOWN:
                 btn_texture = m_brake_tex;
+                break;
+            case MultitouchButtonType::BUTTON_SWAP_RIDERS:
+                btn_texture = m_swap_tex;
                 break;
             case MultitouchButtonType::BUTTON_CUSTOM:
                 if (button->id == 1)

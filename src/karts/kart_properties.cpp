@@ -35,6 +35,7 @@
 #include "karts/controller/ai_properties.hpp"
 #include "karts/kart_model.hpp"
 #include "karts/kart_properties_manager.hpp"
+#include "race/race_manager.hpp"
 #include "karts/xml_characteristic.hpp"
 #include "modes/world.hpp"
 #include "io/xml_node.hpp"
@@ -854,13 +855,27 @@ InterpolationArray KartProperties::getTurnTimeFullSteer() const
 // ----------------------------------------------------------------------------
 float KartProperties::getEnginePower() const
 {
-    return m_cached_characteristic->getEnginePower();
+    float multiplier = 1.0f;
+    switch (RaceManager::get()->getDifficulty())
+    {
+    case RaceManager::DIFFICULTY_EASY: multiplier = 0.84f; break;
+    case RaceManager::DIFFICULTY_MEDIUM: multiplier = 1.0f; break;
+    default: multiplier = 1.18f; break;
+    }
+    return m_cached_characteristic->getEnginePower() * multiplier;
 }  // getEnginePower
 
 // ----------------------------------------------------------------------------
 float KartProperties::getEngineMaxSpeed() const
 {
-    return m_cached_characteristic->getEngineMaxSpeed();
+    float multiplier = 1.0f;
+    switch (RaceManager::get()->getDifficulty())
+    {
+    case RaceManager::DIFFICULTY_EASY: multiplier = 0.82f; break;
+    case RaceManager::DIFFICULTY_MEDIUM: multiplier = 1.0f; break;
+    default: multiplier = 1.18f; break;
+    }
+    return m_cached_characteristic->getEngineMaxSpeed() * multiplier;
 }  // getEngineMaxSpeed
 
 // ----------------------------------------------------------------------------

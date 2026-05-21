@@ -65,6 +65,7 @@ private:
     video::ITexture* m_left_tex;
     video::ITexture* m_right_tex;
     video::ITexture* m_brake_tex;
+    video::ITexture* m_swap_tex;
     video::ITexture* m_screen_tex;
 
     void init();
