@@ -22,6 +22,8 @@
 #include <rect.h>
 #include <vector2d.h>
 
+#include "input/multitouch_device.hpp"
+
 namespace irr
 {
     namespace video
@@ -32,7 +34,6 @@ namespace irr
 using namespace irr;
 
 class AbstractKart;
-class MultitouchDevice;
 class RaceGUIBase;
 
 class RaceGUIMultitouch
