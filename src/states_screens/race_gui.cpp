@@ -261,7 +261,7 @@ void RaceGUI::calculateMinimapSize()
         m_map_left = (int)((irr_driver->getActualScreenSize().Width -
                                                         m_map_width) * 0.95f);
         m_map_bottom = (int)(irr_driver->getActualScreenSize().Height -
-                                                    top_margin - m_map_height);
+                              (65.0f * scaling) - m_map_height);
     }
 }  // calculateMinimapSize
 

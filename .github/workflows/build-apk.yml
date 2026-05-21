@@ -64,7 +64,12 @@ jobs:
 
           assets = Path("../stk-assets").resolve()
           karts = assets / "karts"
+          repo_icons = Path("data/gui/icons/characters").resolve()
           characters = [
+              ("favela", "tux", "Favela", "medium", "0.92 0.47 0.05"),
+              ("atho", "kiki", "Atho", "light", "0.02 0.02 0.02"),
+              ("nina", "puffy", "Nina", "heavy", "0.58 0.36 0.18"),
+              ("popo", "kiki", "Popo", "light", "0.64 0.46 0.28"),
               ("vira_lata_preto", "tux", "Vira-lata Preto", "medium", "0.04 0.04 0.04"),
               ("gato_rajado", "kiki", "Gato Rajado", "light", "0.62 0.42 0.24"),
               ("capivara", "puffy", "Capivara", "heavy", "0.46 0.30 0.16"),
@@ -93,6 +98,12 @@ jobs:
               root.set("name", name)
               root.set("type", kart_type)
               root.set("rgb", rgb)
+              root.set("groups", "standard")
+              icon = repo_icons / f"{ident}.png"
+              if icon.exists():
+                  shutil.copy2(icon, dst / "icon.png")
+                  root.set("icon-file", "icon.png")
+                  root.set("minimap-icon-file", "icon.png")
               tree.write(kart_xml, encoding="utf-8", xml_declaration=True)
               print(f"Prepared {name} from {source}")
           PY
@@ -109,7 +120,7 @@ jobs:
       - name: Generate Android assets
         working-directory: android
         env:
-          KARTS: "vira_lata_preto gato_rajado capivara tucano arara onca lobo_guara tamandua quati mico_leao jacare preguica tatu_bola"
+          KARTS: "favela atho nina popo vira_lata_preto gato_rajado capivara tucano arara onca lobo_guara tamandua quati mico_leao jacare preguica tatu_bola"
           TRACKS: "all"
           RUN_OPTIMIZE_SCRIPT: "0"
           DECREASE_QUALITY: "1"

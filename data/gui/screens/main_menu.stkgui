@@ -2,7 +2,7 @@
 <stkgui>
     <div x="0" y="0" width="100%" height="100%" layout="vertical-row" >
         <spacer width="10" height="2%"/>
-        <icon id="logo" align="center" width="94%" height="54%" icon="gui/icons/caramelo_dash.png"/>
+        <icon id="logo" align="center" width="94%" height="42%" icon="gui/icons/logo_slim.png"/>
         <spacer width="10" height="2%"/>
 
         <buttonbar id="menu_toprow" proportion="3" width="62%" align="center">
@@ -14,7 +14,8 @@
                          I18N="Main menu button" text="Online" label_location="hover"/>
         </buttonbar>
 
-        <spacer width="10" height="6%"/>
+        <label width="100%" height="6%" text="Desenvolvido por Wagner Junior" align="center" text_align="center"/>
+        <spacer width="10" height="4%"/>
 
         <div width="100%" height="3f" layout="vertical-row" >
 

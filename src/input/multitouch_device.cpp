@@ -678,15 +678,6 @@ void MultitouchDevice::updateController()
         return;
     }
 
-    // Handle multitouch events only when race is running. It avoids to process
-    // it when pause dialog is active during the race. And there is no reason
-    // to use it for GUI navigation.
-    if (!isGameRunning())
-    {
-        m_controller = NULL;
-        return;
-    }
-
     AbstractKart* pk = m_player->getKart();
 
     if (pk == NULL)
@@ -696,6 +687,13 @@ void MultitouchDevice::updateController()
     }
 
     m_controller = pk->getController();
+    const bool game_running = isGameRunning();
+    if (!game_running && !UserConfigParams::m_multitouch_auto_acceleration)
+    {
+        m_controller = NULL;
+        return;
+    }
+
     bool swap_pressed = false;
     if (UserConfigParams::m_multitouch_auto_acceleration)
     {
@@ -729,7 +727,7 @@ void MultitouchDevice::updateController()
         }
     }
 
-    if (swap_pressed && !m_swap_riders_was_pressed)
+    if (game_running && swap_pressed && !m_swap_riders_was_pressed)
         pk->swapTeamRiders();
     m_swap_riders_was_pressed = swap_pressed;
 }

@@ -72,7 +72,7 @@ void ItemManager::loadDefaultItemMeshes()
 
     // A temporary mapping of items to names used in the XML file:
     std::map<ItemState::ItemType, std::string> item_names;
-    item_names[ItemState::ITEM_BANANA     ] = "banana";
+    item_names[ItemState::ITEM_BANANA     ] = "bonus-box";
     item_names[ItemState::ITEM_BONUS_BOX  ] = "bonus-box";
     item_names[ItemState::ITEM_BUBBLEGUM  ] = "bubblegum";
     item_names[ItemState::ITEM_NITRO_BIG  ] = "nitro-big";
@@ -682,7 +682,7 @@ bool ItemManager::randomItemsForArena(const AlignedArray<btTransform>& pos)
         const unsigned j = random_numbers[i] % 10;
         ItemState::ItemType type = (j > BONUS_BOX ? ItemState::ITEM_BONUS_BOX :
             j > NITRO_BIG ? ItemState::ITEM_NITRO_BIG :
-            j > NITRO_SMALL ? ItemState::ITEM_NITRO_SMALL : ItemState::ITEM_BANANA);
+            j > NITRO_SMALL ? ItemState::ITEM_NITRO_SMALL : ItemState::ITEM_BONUS_BOX);
 
         ArenaNode* an = ag->getNode(used_location[i]);
         Vec3 loc = an->getCenter();

@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
 <karts>
+    <kart name="favela" type="medium" width="0.92" height="0.76" length="1.52" gravity-shift="0 0.38 0"/>
+    <kart name="atho" type="light" width="0.84" height="0.82" length="1.30" gravity-shift="0 0.40 0"/>
+    <kart name="nina" type="heavy" width="1.10" height="0.84" length="1.62" gravity-shift="0 0.42 0"/>
+    <kart name="popo" type="light" width="0.86" height="0.84" length="1.30" gravity-shift="0 0.40 0"/>
     <kart name="vira_lata_preto" type="medium" width="0.821" height="0.675" length="1.437" gravity-shift="0 0.3375 0"/>
     <kart name="gato_rajado" type="light" width="0.866" height="0.974" length="1.227" gravity-shift="0 0.3681 0"/>
     <kart name="capivara" type="heavy" width="1.109" height="0.621" length="1.573" gravity-shift="0 0.3105 0"/>

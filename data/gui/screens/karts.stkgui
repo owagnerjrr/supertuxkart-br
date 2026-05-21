@@ -3,7 +3,7 @@
     <div x="1%" y="1%" width="98%" height="99%" layout="vertical-row" >
         <header width="80%" height="8%"
                I18N="In the kart selection (player setup) screen"
-               text="Choose Your Character"
+               text="Escolha a dupla do kart"
                align="center" text_align="center" />
         <spacer height="1%" width="25"/>
 
@@ -32,7 +32,7 @@
                             child_width="90" child_height="90"/>
                     <spacer width="3%"/>
                     <!-- This is only used when a touchscreen is active, to allow previewing a kart without validating the pick. -->
-                    <icon-button id="continue" y="10%" icon="gui/icons/green_check.png" text="Continue"/>
+                    <icon-button id="continue" y="10%" icon="gui/icons/green_check.png" text="Confirmar dupla"/>
                 </div>
             </box>
             <!-- Groups will be added dynamically at runtime -->

@@ -11,6 +11,18 @@ std::vector<BrazilianRacingRoster::Character> buildCharacterRoster()
     typedef BrazilianRacingRoster Roster;
     std::vector<Roster::Character> characters;
 
+    characters.push_back({ "favela", "Favela",
+        Roster::SPECIES_DOG, "Cachorra caramela alegre e brasileira.",
+        "Equilibrada, carismatica e forte no turbo.", 1.08f, 1.06f, 1.06f, 1.08f });
+    characters.push_back({ "atho", "Atho",
+        Roster::SPECIES_CAT, "Gato preto com colar vermelho e cara brava.",
+        "Leve, nervoso e excelente em drift curto.", 1.02f, 1.14f, 1.18f, 1.00f });
+    characters.push_back({ "nina", "Nina",
+        Roster::SPECIES_DOG, "Cachorra fila de grande porte.",
+        "Pesada, rapida em reta e muito estavel.", 1.14f, 0.96f, 0.96f, 1.08f });
+    characters.push_back({ "popo", "Popo",
+        Roster::SPECIES_CAT, "Gata rajada esperta e observadora.",
+        "Boa aceleracao e controle fino nas curvas.", 1.00f, 1.12f, 1.15f, 1.04f });
     characters.push_back({ "vira_lata_preto", "Vira-lata Preto",
         Roster::SPECIES_DOG, "Cachorro preto brasileiro, agil e esperto.",
         "Arrancada boa e controle facil em curvas.", 1.00f, 1.08f, 1.08f, 1.00f });
@@ -63,7 +75,7 @@ std::vector<BrazilianRacingRoster::SpeedClassInfo> buildSpeedClasses()
         Roster::SPEED_CLASS_50_CC,
         "50cc",
         "50 cc",
-        0.82f,
+        0.95f,
         1.08f,
         1.10f
     });
@@ -72,7 +84,7 @@ std::vector<BrazilianRacingRoster::SpeedClassInfo> buildSpeedClasses()
         Roster::SPEED_CLASS_100_CC,
         "100cc",
         "100 cc",
-        1.00f,
+        1.15f,
         1.00f,
         1.00f
     });
@@ -81,7 +93,7 @@ std::vector<BrazilianRacingRoster::SpeedClassInfo> buildSpeedClasses()
         Roster::SPEED_CLASS_150_CC,
         "150cc",
         "150 cc",
-        1.18f,
+        1.35f,
         0.94f,
         0.90f
     });

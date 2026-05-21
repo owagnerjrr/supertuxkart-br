@@ -7,11 +7,16 @@ $ErrorActionPreference = "Stop"
 
 $assetsRoot = Resolve-Path -LiteralPath $AssetsPath
 $kartsRoot = Join-Path $assetsRoot "karts"
+$iconRoot = Join-Path (Split-Path -Parent $PSScriptRoot) "data\gui\icons\characters"
 if (-not (Test-Path -LiteralPath $kartsRoot)) {
     throw "Karts folder not found: $kartsRoot"
 }
 
 $characters = @(
+    @{ Id = "favela";          Source = "tux";     Name = "Favela";          Type = "medium"; Color = "0.92 0.47 0.05" },
+    @{ Id = "atho";            Source = "kiki";    Name = "Atho";            Type = "light";  Color = "0.02 0.02 0.02" },
+    @{ Id = "nina";            Source = "puffy";   Name = "Nina";            Type = "heavy";  Color = "0.58 0.36 0.18" },
+    @{ Id = "popo";            Source = "kiki";    Name = "Popo";            Type = "light";  Color = "0.64 0.46 0.28" },
     @{ Id = "vira_lata_preto"; Source = "tux";     Name = "Vira-lata Preto"; Type = "medium"; Color = "0.04 0.04 0.04" },
     @{ Id = "gato_rajado";     Source = "kiki";    Name = "Gato Rajado";     Type = "light";  Color = "0.62 0.42 0.24" },
     @{ Id = "capivara";        Source = "puffy";   Name = "Capivara";        Type = "heavy";  Color = "0.46 0.30 0.16" },
@@ -51,9 +56,17 @@ foreach ($character in $characters) {
     }
 
     [xml]$kartXml = Get-Content -LiteralPath $kartXmlPath
-    $kartXml.kart.name = $character.Name
-    $kartXml.kart.type = $character.Type
-    $kartXml.kart."rgb" = $character.Color
+    $kartXml.kart.SetAttribute("name", $character.Name)
+    $kartXml.kart.SetAttribute("type", $character.Type)
+    $kartXml.kart.SetAttribute("rgb", $character.Color)
+    $kartXml.kart.SetAttribute("groups", "standard")
+
+    $iconPath = Join-Path $iconRoot ($character.Id + ".png")
+    if (Test-Path -LiteralPath $iconPath) {
+        Copy-Item -LiteralPath $iconPath -Destination (Join-Path $target "icon.png") -Force
+        $kartXml.kart.SetAttribute("icon-file", "icon.png")
+        $kartXml.kart.SetAttribute("minimap-icon-file", "icon.png")
+    }
     $kartXml.Save($kartXmlPath)
 
     Write-Host "Prepared $($character.Name) from $($character.Source)."

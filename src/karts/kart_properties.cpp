@@ -858,9 +858,9 @@ float KartProperties::getEnginePower() const
     float multiplier = 1.0f;
     switch (RaceManager::get()->getDifficulty())
     {
-    case RaceManager::DIFFICULTY_EASY: multiplier = 0.84f; break;
-    case RaceManager::DIFFICULTY_MEDIUM: multiplier = 1.0f; break;
-    default: multiplier = 1.18f; break;
+    case RaceManager::DIFFICULTY_EASY: multiplier = 0.98f; break;
+    case RaceManager::DIFFICULTY_MEDIUM: multiplier = 1.15f; break;
+    default: multiplier = 1.35f; break;
     }
     return m_cached_characteristic->getEnginePower() * multiplier;
 }  // getEnginePower
@@ -871,9 +871,9 @@ float KartProperties::getEngineMaxSpeed() const
     float multiplier = 1.0f;
     switch (RaceManager::get()->getDifficulty())
     {
-    case RaceManager::DIFFICULTY_EASY: multiplier = 0.82f; break;
-    case RaceManager::DIFFICULTY_MEDIUM: multiplier = 1.0f; break;
-    default: multiplier = 1.18f; break;
+    case RaceManager::DIFFICULTY_EASY: multiplier = 0.95f; break;
+    case RaceManager::DIFFICULTY_MEDIUM: multiplier = 1.15f; break;
+    default: multiplier = 1.35f; break;
     }
     return m_cached_characteristic->getEngineMaxSpeed() * multiplier;
 }  // getEngineMaxSpeed
