@@ -23,6 +23,12 @@ jobs:
             gradle dos2unix meson ninja-build ccache glslang-tools python3-mako \
             python3-ply python3-yaml pkg-config bison byacc flex
 
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
@@ -130,4 +136,3 @@ jobs:
           name: caramelo-dash-debug-apk
           path: android/build/outputs/apk/debug/android-debug.apk
           if-no-files-found: error
-
