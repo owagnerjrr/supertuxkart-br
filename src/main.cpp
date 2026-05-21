@@ -2498,6 +2498,13 @@ int main(int argc, char *argv[])
                 irr_driver->getDevice()->setWindowMinimumSize(480, 480);
             }
             #ifdef MOBILE_STK
+            if (irr_driver->getDevice()->supportsTouchDevice())
+            {
+                UserConfigParams::m_multitouch_controls = MULTITOUCH_CONTROLS_STEERING_WHEEL;
+                UserConfigParams::m_multitouch_auto_acceleration = true;
+                UserConfigParams::m_multitouch_draw_gui = true;
+                UserConfigParams::m_multitouch_inverted = false;
+            }
             if (UserConfigParams::m_multitouch_controls == MULTITOUCH_CONTROLS_UNDEFINED)
             {
                 bool android_tv = false;

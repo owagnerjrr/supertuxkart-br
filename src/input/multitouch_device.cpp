@@ -105,6 +105,9 @@ void MultitouchDevice::addButton(MultitouchButtonType type, int x, int y,
     case MultitouchButtonType::BUTTON_FIRE:
         button->action = PA_FIRE;
         break;
+    case MultitouchButtonType::BUTTON_FIRE_BACKWARDS:
+        button->action = PA_BEFORE_FIRST;
+        break;
     case MultitouchButtonType::BUTTON_NITRO:
         button->action = PA_NITRO;
         break;
@@ -266,7 +269,7 @@ void MultitouchDevice::updateDeviceState(unsigned int event_id)
             if (button == NULL)
                 return false;
             return button->type >= BUTTON_FIRE &&
-                button->type <= BUTTON_LOOK_BACKWARDS;
+            button->type <= BUTTON_LOOK_BACKWARDS;
         };
 
     const MultitouchEvent& event = m_events[event_id];
@@ -627,10 +630,22 @@ void MultitouchDevice::handleControls(MultitouchButton* button)
         {
             updateAxisY(button->axis_y);
         }
+        else if (button->type == MultitouchButtonType::BUTTON_FIRE_BACKWARDS)
+        {
+            int value = button->pressed ? Input::MAX_VALUE : 0;
+            m_controller->action(PA_LOOK_BACK, value);
+            m_controller->action(PA_FIRE, value);
+        }
         else if (button->action != PA_BEFORE_FIRST)
         {
             int value = button->pressed ? Input::MAX_VALUE : 0;
             m_controller->action(button->action, value);
+            if (button->type == MultitouchButtonType::BUTTON_DOWN &&
+                UserConfigParams::m_multitouch_auto_acceleration)
+            {
+                m_controller->action(PA_ACCEL, button->pressed ? 0 :
+                                     Input::MAX_VALUE);
+            }
         }
     }
 
@@ -677,6 +692,20 @@ void MultitouchDevice::updateController()
     }
 
     m_controller = pk->getController();
+    if (UserConfigParams::m_multitouch_auto_acceleration)
+    {
+        bool braking = false;
+        for (MultitouchButton* button : m_buttons)
+        {
+            if (button && button->type == MultitouchButtonType::BUTTON_DOWN &&
+                button->pressed)
+            {
+                braking = true;
+                break;
+            }
+        }
+        m_controller->action(PA_ACCEL, braking ? 0 : Input::MAX_VALUE);
+    }
 }
 
 // ----------------------------------------------------------------------------

@@ -540,7 +540,7 @@ namespace UserConfigParams
             "Enable multitouch support: 0 = disabled, 1 = if available, 2 = enabled") );
 
     PARAM_PREFIX BoolUserConfigParam         m_multitouch_draw_gui
-            PARAM_DEFAULT( BoolUserConfigParam(false, "multitouch_draw_gui",
+            PARAM_DEFAULT( BoolUserConfigParam(true, "multitouch_draw_gui",
             &m_multitouch_group,
             "Enable multitouch race GUI"));
 
@@ -550,12 +550,12 @@ namespace UserConfigParams
             "Draw steering wheel on right side.") );
 
     PARAM_PREFIX BoolUserConfigParam         m_multitouch_auto_acceleration
-            PARAM_DEFAULT( BoolUserConfigParam(false, "multitouch_auto_acceleration",
+            PARAM_DEFAULT( BoolUserConfigParam(true, "multitouch_auto_acceleration",
             &m_multitouch_group,
             "Auto acceleration for multitouch controls.") );
 
     PARAM_PREFIX IntUserConfigParam         m_multitouch_controls
-            PARAM_DEFAULT( IntUserConfigParam(0, "multitouch_controls",
+            PARAM_DEFAULT( IntUserConfigParam(1, "multitouch_controls",
             &m_multitouch_group,
             "Multitouch mode: 0 = undefined, 1 = steering wheel, 2 = accelerometer, 3 = gyroscope"));
 

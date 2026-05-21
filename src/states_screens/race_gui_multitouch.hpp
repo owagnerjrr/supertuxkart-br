@@ -61,12 +61,16 @@ private:
     video::ITexture* m_gui_action_tex;
     video::ITexture* m_up_tex;
     video::ITexture* m_down_tex;
+    video::ITexture* m_left_tex;
+    video::ITexture* m_right_tex;
+    video::ITexture* m_brake_tex;
     video::ITexture* m_screen_tex;
 
     void init();
     void createRaceGUI();
     void createSpectatorGUI();
     void close();
+    bool isSpeedDriftersButton(MultitouchButtonType type) const;
     static void onCustomButtonPress(unsigned int button_id, bool pressed);
 
 public:

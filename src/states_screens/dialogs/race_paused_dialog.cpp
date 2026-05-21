@@ -525,25 +525,9 @@ void RacePausedDialog::beforeAddingWidgets()
     else
         m_text_box = NULL;
         
-    bool has_multitouch_gui = false;
-    
-    if (World::getWorld() && World::getWorld()->getRaceGUI() &&
-        World::getWorld()->getRaceGUI()->getMultitouchGUI() &&
-        !World::getWorld()->getRaceGUI()->getMultitouchGUI()->isSpectatorMode())
-    {
-        has_multitouch_gui = true;
-    }
-    
-    IrrlichtDevice* irrlicht_device = irr_driver->getDevice();
-    assert(irrlicht_device != NULL);
-    bool accelerometer_available = irrlicht_device->isAccelerometerAvailable();
-    
-    if (!has_multitouch_gui || !accelerometer_available)
-    {
-        GUIEngine::RibbonWidget* backbtn_ribbon =
-                            getWidget<GUIEngine::RibbonWidget>("backbtnribbon");
-        backbtn_ribbon->removeChildNamed("touch_device");
-    }
+    GUIEngine::RibbonWidget* backbtn_ribbon =
+                        getWidget<GUIEngine::RibbonWidget>("backbtnribbon");
+    backbtn_ribbon->removeChildNamed("touch_device");
 
 }   // beforeAddingWidgets
 

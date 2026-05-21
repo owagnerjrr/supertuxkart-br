@@ -63,6 +63,9 @@ RaceGUIMultitouch::RaceGUIMultitouch(RaceGUIBase* race_gui)
     m_gui_action_tex = NULL;
     m_up_tex = NULL;
     m_down_tex = NULL;
+    m_left_tex = NULL;
+    m_right_tex = NULL;
+    m_brake_tex = NULL;
     m_screen_tex = NULL;
 
     m_device = input_manager->getDeviceManager()->getMultitouchDevice();
@@ -157,6 +160,9 @@ void RaceGUIMultitouch::init()
     m_gui_action_tex = irr_driver->getTexture(FileManager::GUI_ICON,"challenge.png");
     m_up_tex = irr_driver->getTexture(FileManager::GUI_ICON, "up.png");
     m_down_tex = irr_driver->getTexture(FileManager::GUI_ICON, "down.png");
+    m_left_tex = irr_driver->getTexture(FileManager::GUI_ICON, "android/left_arrow.png");
+    m_right_tex = irr_driver->getTexture(FileManager::GUI_ICON, "android/right_arrow.png");
+    m_brake_tex = irr_driver->getTexture(FileManager::GUI_ICON, "android/brake.png");
     m_screen_tex = irr_driver->getTexture(FileManager::GUI_ICON, "screen_other.png");
     m_steering_wheel_tex_mask_up = irr_driver->getTexture(FileManager::GUI_ICON,
                                         "android/steering_wheel_mask_up.png");
@@ -183,16 +189,11 @@ void RaceGUIMultitouch::createRaceGUI()
 {
     if (m_device == NULL)
         return;
-        
-    if (UserConfigParams::m_multitouch_controls == MULTITOUCH_CONTROLS_ACCELEROMETER)
-    {
-        m_device->activateAccelerometer();
-    }
-    if (UserConfigParams::m_multitouch_controls == MULTITOUCH_CONTROLS_GYROSCOPE)
-    {
-        m_device->activateAccelerometer();
-        m_device->activateGyroscope();
-    }
+
+    UserConfigParams::m_multitouch_controls = MULTITOUCH_CONTROLS_STEERING_WHEEL;
+    UserConfigParams::m_multitouch_auto_acceleration = true;
+    UserConfigParams::m_multitouch_draw_gui = true;
+    UserConfigParams::m_multitouch_inverted = false;
 
     const float scale = UserConfigParams::m_multitouch_scale;
 
@@ -202,7 +203,7 @@ void RaceGUIMultitouch::createRaceGUI()
 
     const int h = irr_driver->getActualScreenSize().Height;
     const float btn_size = 0.125f * h * scale;
-    const float btn2_size = 0.35f * h * scale;
+    const float steer_size = 0.18f * h * scale;
     const float margin = 0.075f * h * scale;
     const float margin_top = 0.3f * h;
     const float col_size = (btn_size + margin);
@@ -216,60 +217,53 @@ void RaceGUIMultitouch::createRaceGUI()
     if (irr_driver->getDevice()->getLeftPadding() > 0)
         left_padding = irr_driver->getDevice()->getLeftPadding();
 
-    float first_column_x = w - 2 * col_size;
-    float second_column_x = w - 1 * col_size;
-    float steering_wheel_margin = 0.6f * margin;
-    float steering_wheel_x = steering_wheel_margin;
-    steering_wheel_x += left_padding;
-    float steering_wheel_y = h - steering_wheel_margin - btn2_size;
-    float steering_accel_margin = margin;
-    float steering_accel_x = steering_accel_margin;
-    steering_accel_x += left_padding;
-    float steering_accel_y = h - steering_accel_margin - btn2_size;
+    const float left_x = left_padding + margin;
+    const float steer_y = h - margin - steer_size;
+    const float right_x = left_x + steer_size + margin * 0.2f;
 
-    if (UserConfigParams::m_multitouch_inverted)
-    {
-        first_column_x = margin + 1 * col_size + left_padding;
-        second_column_x = margin + left_padding;
-        steering_wheel_x = w - btn2_size - steering_wheel_margin;
-        steering_accel_x = w - btn2_size / 2 - steering_accel_margin;
-    }
+    const float item_x = w - 2.25f * col_size;
+    const float item_back_x = w - 1.2f * col_size;
+    const float action_y = h - 1.35f * col_size;
+    const float utility_y = h - 2.4f * col_size;
+    const float brake_x = w - 3.1f * col_size;
+    const float drift_x = w - 1.55f * col_size;
 
-    m_height = (unsigned int)(2 * col_size + margin / 2);
-    
-    if (UserConfigParams::m_multitouch_controls == MULTITOUCH_CONTROLS_ACCELEROMETER ||
-        UserConfigParams::m_multitouch_controls == MULTITOUCH_CONTROLS_GYROSCOPE)
-    {
-        m_device->addButton(BUTTON_UP_DOWN,
-                    int(steering_accel_x), int(steering_accel_y),
-                    int(btn2_size / 2), int(btn2_size));
-    }
-    else
-    {
-        m_device->addButton(BUTTON_STEERING,
-                            int(steering_wheel_x), int(steering_wheel_y),
-                            int(btn2_size), int(btn2_size));
-    }
+    m_height = (unsigned int)(steer_size + margin * 2.0f);
+
+    m_device->addButton(BUTTON_LEFT,
+                        int(left_x), int(steer_y),
+                        int(steer_size), int(steer_size));
+    m_device->addButton(BUTTON_RIGHT,
+                        int(right_x), int(steer_y),
+                        int(steer_size), int(steer_size));
 
     m_device->addButton(BUTTON_ESCAPE,
                         int(margin_top), int(margin_small),
                         int(btn_small_size), int(btn_small_size));
-    m_device->addButton(BUTTON_RESCUE,
-                        int(margin_top + col_small_size), int(margin_small),
-                        int(btn_small_size), int(btn_small_size));
-    m_device->addButton(BUTTON_NITRO,
-                        int(second_column_x), int(h - 2 * col_size),
-                        int(btn_size), int(btn_size));
     m_device->addButton(BUTTON_SKIDDING,
-                        int(second_column_x), int(h - 1 * col_size),
+                        int(drift_x), int(action_y),
                         int(btn_size), int(btn_size));
     m_device->addButton(BUTTON_FIRE,
-                        int(first_column_x),  int(h - 2 * col_size),
+                        int(item_x), int(utility_y),
                         int(btn_size), int(btn_size));
-    m_device->addButton(BUTTON_LOOK_BACKWARDS,
-                        int(first_column_x), int(h - 1 * col_size),
+    m_device->addButton(BUTTON_FIRE_BACKWARDS,
+                        int(item_back_x), int(utility_y),
+                        int(btn_size), int(btn_size));
+    m_device->addButton(BUTTON_DOWN,
+                        int(brake_x), int(action_y),
                         int(btn_size), int(btn_size));
 } // createRaceGUI
+
+//-----------------------------------------------------------------------------
+bool RaceGUIMultitouch::isSpeedDriftersButton(MultitouchButtonType type) const
+{
+    return type == MultitouchButtonType::BUTTON_LEFT ||
+           type == MultitouchButtonType::BUTTON_RIGHT ||
+           type == MultitouchButtonType::BUTTON_DOWN ||
+           type == MultitouchButtonType::BUTTON_FIRE ||
+           type == MultitouchButtonType::BUTTON_FIRE_BACKWARDS ||
+           type == MultitouchButtonType::BUTTON_SKIDDING;
+}
 
 //-----------------------------------------------------------------------------
 /** Determines the look of spectator GUI interface
@@ -448,6 +442,7 @@ void RaceGUIMultitouch::draw(const AbstractKart* kart,
                 btn_texture = m_pause_tex;
                 break;
             case MultitouchButtonType::BUTTON_FIRE:
+            case MultitouchButtonType::BUTTON_FIRE_BACKWARDS:
             {
                 const Powerup* powerup = kart->getPowerup();
                 if (m_gui_action == true)
@@ -488,6 +483,15 @@ void RaceGUIMultitouch::draw(const AbstractKart* kart,
             case MultitouchButtonType::BUTTON_SKIDDING:
                 btn_texture = m_drift_tex;
                 break;
+            case MultitouchButtonType::BUTTON_LEFT:
+                btn_texture = m_left_tex;
+                break;
+            case MultitouchButtonType::BUTTON_RIGHT:
+                btn_texture = m_right_tex;
+                break;
+            case MultitouchButtonType::BUTTON_DOWN:
+                btn_texture = m_brake_tex;
+                break;
             case MultitouchButtonType::BUTTON_CUSTOM:
                 if (button->id == 1)
                 {
@@ -516,7 +520,16 @@ void RaceGUIMultitouch::draw(const AbstractKart* kart,
                                                         m_bg_button_focus_tex :
                                                         m_bg_button_tex;
                 core::rect<s32> coords_bg(pos_zero, btn_bg->getSize());
-                draw2DImage(btn_bg, btn_pos_bg, coords_bg, NULL, NULL, true);
+                core::rect<s32> bg_pos = btn_pos_bg;
+                if (isSpeedDriftersButton(button->type))
+                {
+                    bg_pos = core::rect<s32>(
+                        (int)(button->x - button->width * 0.08f),
+                        (int)(button->y - button->height * 0.08f),
+                        (int)(button->x + button->width * 1.08f),
+                        (int)(button->y + button->height * 1.08f));
+                }
+                draw2DImage(btn_bg, bg_pos, coords_bg, NULL, NULL, true);
 
                 core::rect<s32> coords(pos_zero, btn_texture->getSize());
                 draw2DImage(btn_texture, btn_pos, coords, NULL, NULL, true);
@@ -533,7 +546,8 @@ void RaceGUIMultitouch::draw(const AbstractKart* kart,
                                             kart, viewport,
                                             core::vector2df(scale, scale));
             }
-            else if (button->type == MultitouchButtonType::BUTTON_FIRE &&
+            else if ((button->type == MultitouchButtonType::BUTTON_FIRE ||
+                      button->type == MultitouchButtonType::BUTTON_FIRE_BACKWARDS) &&
                      kart->getPowerup()->getNum() > 1 &&
                      !kart->hasFinishedRace() &&
                      m_gui_action == false)
