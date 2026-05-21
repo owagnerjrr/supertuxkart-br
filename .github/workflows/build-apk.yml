@@ -57,43 +57,7 @@ jobs:
 
       - name: Create placeholder Caramelo Dash karts
         run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          import shutil
-          import xml.etree.ElementTree as ET
-
-          assets = Path("../stk-assets").resolve()
-          karts = assets / "karts"
-          repo_icons = Path("data/gui/icons/characters").resolve()
-          characters = [
-              ("favela", "tux", "Favela", "medium", "0.92 0.47 0.05"),
-              ("atho", "kiki", "Atho", "light", "0.02 0.02 0.02"),
-              ("nina", "puffy", "Nina", "heavy", "0.58 0.36 0.18"),
-              ("popo", "kiki", "Popo", "heavy", "0.64 0.46 0.28"),
-          ]
-
-          for ident, source, name, kart_type, rgb in characters:
-              src = karts / source
-              dst = karts / ident
-              if dst.exists():
-                  shutil.rmtree(dst)
-              shutil.copytree(src, dst)
-
-              kart_xml = dst / "kart.xml"
-              tree = ET.parse(kart_xml)
-              root = tree.getroot()
-              root.set("name", name)
-              root.set("type", kart_type)
-              root.set("rgb", rgb)
-              root.set("groups", "standard")
-              icon = repo_icons / f"{ident}.png"
-              if icon.exists():
-                  shutil.copy2(icon, dst / "icon.png")
-                  root.set("icon-file", "icon.png")
-                  root.set("minimap-icon-file", "icon.png")
-              tree.write(kart_xml, encoding="utf-8", xml_declaration=True)
-              print(f"Prepared {name} from {source}")
-          PY
+          python3 tools/create_caramelo_pet_models.py --assets-path ../stk-assets --force
 
       - name: Fetch Android dependency sources
         run: |
