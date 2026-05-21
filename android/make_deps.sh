@@ -382,10 +382,16 @@ build_deps()
             echo "Compiling $ARCH_OPTION libadrenotools"
             mkdir -p "$DIRNAME/deps-$ARCH_OPTION/libadrenotools"
             mkdir -p "$DIRNAME/mesa/arm64-v8a"
-            git clone "$DIRNAME/../lib/libadrenotools" "$DIRNAME/deps-$ARCH_OPTION/libadrenotools"
+            if [ -d "$DIRNAME/../lib/libadrenotools/.git" ]; then
+                git clone "$DIRNAME/../lib/libadrenotools" "$DIRNAME/deps-$ARCH_OPTION/libadrenotools"
+            else
+                cp -a -f "$DIRNAME/../lib/libadrenotools/." "$DIRNAME/deps-$ARCH_OPTION/libadrenotools"
+            fi
 
             cd "$DIRNAME/deps-$ARCH_OPTION/libadrenotools"
-            git submodule update --init
+            if [ -d .git ]; then
+                git submodule update --init
+            fi
             cmake . -DCMAKE_TOOLCHAIN_FILE=../../../cmake/Toolchain-android.cmake \
                     -DHOST=$HOST -DARCH=$ARCH -DCMAKE_C_FLAGS="-fpic -O3 -g"      \
                     -DCMAKE_CXX_FLAGS="-fpic -O3 -g"                              \

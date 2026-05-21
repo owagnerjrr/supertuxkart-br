@@ -2131,6 +2131,11 @@ void askForInternetPermission()
         Online::RequestManager::IPERM_NOT_ASKED)
         return;
 
+    UserConfigParams::m_internet_status =
+        Online::RequestManager::IPERM_NOT_ALLOWED;
+    user_config->saveConfig();
+    return;
+
     class ConfirmServer :
           public MessageDialog::IConfirmDialogListener
     {

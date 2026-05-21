@@ -3,7 +3,7 @@
     <div x="1%" y="1%" width="98%" height="99%" layout="vertical-row" >
         <header width="80%" height="8%"
                I18N="In the kart selection (player setup) screen"
-               text="Choose a Kart"
+               text="Choose Your Character"
                align="center" text_align="center" />
         <spacer height="1%" width="25"/>
 
@@ -15,7 +15,7 @@
         <div width="100%" height="35%" layout="vertical-row" >
             <box proportion="2" width="100%" layout="vertical-row" padding="2">
                 <spacer height="5%"/>
-                <div width="95%" height="1f" layout="horizontal-row" align="center">
+                <div width="95%" height="1f" layout="horizontal-row" align="center" visible="false">
                     <label text="Kart Class" align="center" I18N="In karts selection screen, determine the kart group shown on the list"/>
                     <spacer width="1%" />
                     <spinner id="kart_class" proportion="23" align="center" min_value="0" wrap_around="true"/>
@@ -36,7 +36,7 @@
                 </div>
             </box>
             <!-- Groups will be added dynamically at runtime -->
-            <tabs width="98%" x="1%" height="1f" id="kartgroups">
+                <tabs width="98%" x="1%" height="1f" id="kartgroups" visible="false">
             </tabs>
             <spacer width="100%" height="2%"/>
         </div>

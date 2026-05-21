@@ -64,8 +64,10 @@ android/android-sdk*
 android/assets
 android/bin
 android/build
+android/converted_textures
 android/deps-*
 android/libs
+android/mesa
 android/obj
 android/res
 android/.gradle
@@ -73,16 +75,21 @@ android/.cxx
 android/src/main/java/HID*
 android/src/main/java/SDL*
 android-*
+android/sdk-packages.txt
 *.apk
 *.keystore
+
+dependencies-android-src.tar.xz
 
 lib/curl
 lib/freetype
 lib/ifaddrs
+lib/libadrenotools
 lib/libogg
 lib/libvorbis
 lib/libpng
 lib/libjpeg
+lib/mesa
 lib/zlib
 lib/openal
 lib/openssl

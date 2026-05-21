@@ -4,12 +4,26 @@ Working title for a SuperTuxKart fork inspired by two-rider kart racing.
 
 ## Product Direction
 
-- Replace the original mascot roster with Brazilian fauna characters.
-- Include the cachorro caramelo as a playable rider.
+- Start with the family pet roster, then expand into Brazilian fauna.
+- Include Favela, the cachorro caramelo, as a playable mascot rider.
 - Keep SuperTuxKart's arcade handling, item play, split-screen/network base, and existing skidding/drift system.
 - Add two-rider karts where one rider drives and the other handles items, with an in-race swap command.
 
-## Initial Roster
+## Initial Playable Roster
+
+The first playable roster is based on the supplied reference photos:
+
+| Ident | Name | Suggested Role |
+| --- | --- | --- |
+| `atho` | Atho | Black cat with red collar, tight handling |
+| `popo` | Popo | Three-color tabby/calico cat, balanced |
+| `favela` | Favela | Caramel dog mascot, strong top speed |
+| `nina` | Nina | Larger dog with collar, stable/heavier racer |
+| `mathias` | Mathias | Darker poodle, technical drift/recovery racer |
+
+ASCII idents are used so asset folders, network packets, and mobile builds stay portable.
+
+## Later Brazilian Fauna Expansion
 
 | Ident | Name | Suggested Role |
 | --- | --- | --- |
@@ -24,8 +38,6 @@ Working title for a SuperTuxKart fork inspired by two-rider kart racing.
 | `tucano` | Tucano | Balanced light rider |
 | `tatu-bola` | Tatu-bola | Compact defensive rider |
 
-ASCII idents are used so asset folders, network packets, and mobile builds stay portable.
-
 ## Implemented Engine Seed
 
 The first code-level seed is intentionally small:
@@ -33,6 +45,8 @@ The first code-level seed is intentionally small:
 - `KartControl` now has `setSwapRiders()` / `getSwapRiders()` and stores the swap request in the remaining compressed control bit.
 - `AbstractKart` now owns a `TeamKartRoster`, which stores front/rear rider ids and exposes `swapTeamRiders()`.
 - `TeamKartRoster` lives in `src/karts/team_kart_roster.hpp` and `src/karts/team_kart_roster.cpp`.
+- `BrazilianRacingRoster` defines the first five characters and the `50 cc`, `100 cc`, and `150 cc` speed classes.
+- `doc/br-menu-double-dash.md` describes the target title, speed-class, pair-selection, and driving-control flow.
 
 This creates the state needed by gameplay, replay/network serialization, UI, and rendering. The next implementation phase should wire an input action to `KartControl::setSwapRiders(true)`, consume that action once per press during race update, and animate rider socket exchange on the kart model.
 
@@ -90,7 +104,7 @@ iOS:
 ## Milestones
 
 1. Import assets and verify a stock Android build.
-2. Create one playable prototype team: `caramelo` plus `capivara`.
+2. Create one playable prototype team: `favela` plus `popo`.
 3. Wire swap input to `KartControl::setSwapRiders()`.
 4. Consume swap in race update and call `AbstractKart::swapTeamRiders()`.
 5. Add rider sockets and swap animation to `KartModel`.
