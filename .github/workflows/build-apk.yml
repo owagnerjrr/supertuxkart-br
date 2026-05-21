@@ -98,11 +98,11 @@ jobs:
           git clone --depth 1 https://github.com/bylaws/liblinkernsbypass.git \
             lib/libadrenotools/lib/linkernsbypass
 
-      - name: Generate minimal Android assets
+      - name: Generate Android assets
         working-directory: android
         env:
-          KARTS: "atho popo favela nina mathias"
-          TRACKS: "abyss"
+          KARTS: "all"
+          TRACKS: "all"
           RUN_OPTIMIZE_SCRIPT: "0"
           DECREASE_QUALITY: "1"
           COMPILE_ARCH: "aarch64"
