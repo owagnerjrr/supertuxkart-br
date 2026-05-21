@@ -38,13 +38,38 @@
 #include "utils/string_utils.hpp"
 #include "utils/translation.hpp"
 
+#include <algorithm>
 #include <iostream>
+#include <vector>
 
 using namespace GUIEngine;
 using namespace irr::core;
 using namespace irr::video;
 
 static const char ALL_TRACK_GROUPS_ID[] = "all";
+
+namespace
+{
+bool isCarameloDashTrack(const std::string& ident)
+{
+    static const std::vector<std::string> tracks =
+    {
+        "black_forest",
+        "cocoa_temple",
+        "cornfield_crossing",
+        "gran_paradiso_island",
+        "hacienda",
+        "mines",
+        "minigolf",
+        "ravenbridge_mansion",
+        "sandtrack",
+        "scotland",
+        "snowmountain",
+        "volcano_island"
+    };
+    return std::find(tracks.begin(), tracks.end(), ident) != tracks.end();
+}
+}
 
 // -----------------------------------------------------------------------------
 
@@ -231,6 +256,17 @@ void TracksAndGPScreen::init()
     {
         const GrandPrixData* gp = grand_prix_manager->getGrandPrix(n);
         const std::vector<std::string> tracks = gp->getTrackNames(true);
+        bool contains_only_caramelo_tracks = !tracks.empty();
+        for (unsigned int t = 0; t < tracks.size(); t++)
+        {
+            if (!isCarameloDashTrack(tracks[t]))
+            {
+                contains_only_caramelo_tracks = false;
+                break;
+            }
+        }
+        if (!contains_only_caramelo_tracks)
+            continue;
 
         //Skip empty GPs
         if (gp->getNumberOfTracks()==0)
@@ -308,6 +344,7 @@ void TracksAndGPScreen::buildTrackList()
         {
             Track* curr = track_manager->getTrack(n);
             if (curr->isArena() || curr->isSoccer() || curr->isInternal()) continue;
+            if (!isCarameloDashTrack(curr->getIdent())) continue;
             if (RaceManager::get()->getMinorMode() == RaceManager::MINOR_MODE_EASTER_EGG
                 && !curr->hasEasterEggs())
                 continue;
@@ -329,6 +366,7 @@ void TracksAndGPScreen::buildTrackList()
         {
             Track* curr = track_manager->getTrack(curr_tracks[n]);
             if (curr->isArena() || curr->isSoccer() || curr->isInternal()) continue;
+            if (!isCarameloDashTrack(curr->getIdent())) continue;
             if (RaceManager::get()->getMinorMode() == RaceManager::MINOR_MODE_EASTER_EGG
                 && !curr->hasEasterEggs())
                 continue;

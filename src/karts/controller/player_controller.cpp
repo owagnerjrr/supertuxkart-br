@@ -347,6 +347,12 @@ void PlayerController::update(int ticks)
         return;
     }   // if isStartPhase
 
+    if (!m_controls->getBrake())
+    {
+        m_controls->setAccel(1.0f);
+        m_controls->setNitro(m_prev_nitro);
+    }
+
     if (m_penalty_ticks != 0 &&
         World::getWorld()->getTicksSinceStart() < m_penalty_ticks)
     {

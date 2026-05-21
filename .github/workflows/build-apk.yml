@@ -121,7 +121,7 @@ jobs:
         working-directory: android
         env:
           KARTS: "favela atho nina popo vira_lata_preto gato_rajado capivara tucano arara onca lobo_guara tamandua quati mico_leao jacare preguica tatu_bola"
-          TRACKS: "all"
+          TRACKS: "black_forest cocoa_temple cornfield_crossing gran_paradiso_island hacienda mines minigolf ravenbridge_mansion sandtrack scotland snowmountain volcano_island"
           RUN_OPTIMIZE_SCRIPT: "0"
           DECREASE_QUALITY: "1"
           COMPILE_ARCH: "aarch64"

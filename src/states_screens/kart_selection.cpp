@@ -35,6 +35,7 @@
 #include "input/device_manager.hpp"
 #include "items/item_manager.hpp"
 #include "karts/abstract_characteristic.hpp"
+#include "karts/br_racing_roster.hpp"
 #include "karts/kart_model.hpp"
 #include "karts/kart_properties.hpp"
 #include "karts/kart_properties_manager.hpp"
@@ -1569,6 +1570,8 @@ PtrVector<const KartProperties, REF> KartSelectionScreen::getUsableKarts(
     for(unsigned int i=0; i<group.size(); i++)
     {
         const KartProperties* prop = kart_properties_manager->getKartById(group[i]);
+        if (BrazilianRacingRoster::getCharacter(prop->getIdent()) == NULL)
+            continue;
         // Ignore karts that are not in the selected group
         if(isIgnored(prop->getIdent()))
             continue;
@@ -1637,9 +1640,6 @@ void KartSelectionScreen::setKartsFromCurrentGroup()
                        IconButtonWidget::ICON_PATH_TYPE_ABSOLUTE);
         }
     }
-
-    // add random
-    w->addItem(_("Random Kart"), RANDOM_KART_ID, "/gui/icons/random_kart.png");
 
     w->updateItemDisplay();
 }
