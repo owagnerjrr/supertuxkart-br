@@ -72,6 +72,7 @@ public:
     static const Character* getCharacter(const std::string& ident);
     static const SpeedClassInfo* getSpeedClass(SpeedClass speed_class);
     static const SpeedClassInfo* getSpeedClass(const std::string& ident);
+    static std::string getDefaultPartnerIdent(const std::string& ident);
     static bool isValidTeamSelection(const TeamSelection& selection);
     static std::string getTeamDisplayName(const TeamSelection& selection);
 };

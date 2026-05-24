@@ -220,7 +220,8 @@ bool PlayerController::action(PlayerAction action, int value, bool dry_run)
         SET_OR_TEST_GETTER(Fire, value!=0);
         break;
     case PA_LOOK_BACK:
-        SET_OR_TEST_GETTER(LookBack, value!=0);
+        SET_OR_TEST_GETTER(SwapRiders, value!=0);
+        SET_OR_TEST_GETTER(LookBack, false);
         break;
     case PA_DRIFT:
         if (value == 0)

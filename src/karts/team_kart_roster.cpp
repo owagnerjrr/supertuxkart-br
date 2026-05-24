@@ -7,6 +7,8 @@
 TeamKartRoster::RiderItemSlot::RiderItemSlot()
 {
     m_has_item = false;
+    m_powerup_type = PowerupManager::POWERUP_NOTHING;
+    m_powerup_count = 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -115,10 +117,52 @@ void TeamKartRoster::setReserveRiderItem(const std::string& item_ident)
 }
 
 // ----------------------------------------------------------------------------
+void TeamKartRoster::setFrontRiderPowerup(PowerupManager::PowerupType type,
+                                          int count)
+{
+    m_front_item.m_powerup_type = type;
+    m_front_item.m_powerup_count = count;
+    m_front_item.m_has_item = type != PowerupManager::POWERUP_NOTHING &&
+                              count > 0;
+}
+
+// ----------------------------------------------------------------------------
+void TeamKartRoster::setRearRiderPowerup(PowerupManager::PowerupType type,
+                                         int count)
+{
+    m_rear_item.m_powerup_type = type;
+    m_rear_item.m_powerup_count = count;
+    m_rear_item.m_has_item = type != PowerupManager::POWERUP_NOTHING &&
+                             count > 0;
+}
+
+// ----------------------------------------------------------------------------
+void TeamKartRoster::setActiveRiderPowerup(PowerupManager::PowerupType type,
+                                           int count)
+{
+    RiderItemSlot& slot = getActiveItemSlot();
+    slot.m_powerup_type = type;
+    slot.m_powerup_count = count;
+    slot.m_has_item = type != PowerupManager::POWERUP_NOTHING && count > 0;
+}
+
+// ----------------------------------------------------------------------------
+void TeamKartRoster::setReserveRiderPowerup(PowerupManager::PowerupType type,
+                                            int count)
+{
+    RiderItemSlot& slot = getReserveItemSlot();
+    slot.m_powerup_type = type;
+    slot.m_powerup_count = count;
+    slot.m_has_item = type != PowerupManager::POWERUP_NOTHING && count > 0;
+}
+
+// ----------------------------------------------------------------------------
 void TeamKartRoster::clearFrontRiderItem()
 {
     m_front_item.m_item_ident.clear();
     m_front_item.m_has_item = false;
+    m_front_item.m_powerup_type = PowerupManager::POWERUP_NOTHING;
+    m_front_item.m_powerup_count = 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -126,6 +170,8 @@ void TeamKartRoster::clearRearRiderItem()
 {
     m_rear_item.m_item_ident.clear();
     m_rear_item.m_has_item = false;
+    m_rear_item.m_powerup_type = PowerupManager::POWERUP_NOTHING;
+    m_rear_item.m_powerup_count = 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -178,5 +224,53 @@ const std::string& TeamKartRoster::getActiveRiderItemIdent() const
 const std::string& TeamKartRoster::getReserveRiderItemIdent() const
 {
     return getReserveItemSlot().m_item_ident;
+}
+
+// ----------------------------------------------------------------------------
+PowerupManager::PowerupType TeamKartRoster::getFrontRiderPowerupType() const
+{
+    return m_front_item.m_powerup_type;
+}
+
+// ----------------------------------------------------------------------------
+PowerupManager::PowerupType TeamKartRoster::getRearRiderPowerupType() const
+{
+    return m_rear_item.m_powerup_type;
+}
+
+// ----------------------------------------------------------------------------
+PowerupManager::PowerupType TeamKartRoster::getActiveRiderPowerupType() const
+{
+    return getActiveItemSlot().m_powerup_type;
+}
+
+// ----------------------------------------------------------------------------
+PowerupManager::PowerupType TeamKartRoster::getReserveRiderPowerupType() const
+{
+    return getReserveItemSlot().m_powerup_type;
+}
+
+// ----------------------------------------------------------------------------
+int TeamKartRoster::getFrontRiderPowerupCount() const
+{
+    return m_front_item.m_powerup_count;
+}
+
+// ----------------------------------------------------------------------------
+int TeamKartRoster::getRearRiderPowerupCount() const
+{
+    return m_rear_item.m_powerup_count;
+}
+
+// ----------------------------------------------------------------------------
+int TeamKartRoster::getActiveRiderPowerupCount() const
+{
+    return getActiveItemSlot().m_powerup_count;
+}
+
+// ----------------------------------------------------------------------------
+int TeamKartRoster::getReserveRiderPowerupCount() const
+{
+    return getReserveItemSlot().m_powerup_count;
 }
 

@@ -23,6 +23,7 @@
 #include "items/attachment.hpp"
 #include "items/powerup.hpp"
 #include "karts/abstract_kart_animation.hpp"
+#include "karts/br_racing_roster.hpp"
 #include "karts/kart_model.hpp"
 #include "karts/kart_properties.hpp"
 #include "karts/kart_properties_manager.hpp"
@@ -152,6 +153,12 @@ void AbstractKart::loadKartProperties(const std::string& new_ident,
             m_kart_length);
     }
     m_name = m_kart_properties->getName();
+    if (BrazilianRacingRoster::getCharacter(new_ident) != NULL)
+        m_team_roster.setRiders(new_ident,
+            BrazilianRacingRoster::getDefaultPartnerIdent(new_ident));
+    else
+        m_team_roster.setRiders(new_ident, std::string());
+
     m_handicap = handicap;
     m_kart_animation  = NULL;
     assert(m_kart_properties);

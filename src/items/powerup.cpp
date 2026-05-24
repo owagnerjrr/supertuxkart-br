@@ -64,6 +64,8 @@ void Powerup::reset()
 {
     m_type = PowerupManager::POWERUP_NOTHING;
     m_number = 0;
+    m_kart->getTeamRoster().clearFrontRiderItem();
+    m_kart->getTeamRoster().clearRearRiderItem();
 
     // Ghost kart will update powerup every frame
     if (m_kart->isGhostKart())
@@ -140,6 +142,7 @@ void Powerup::set(PowerupManager::PowerupType type, int n)
         m_number+=n;
         // Limit to 255 (save space in network state saving)
         if(m_number>255) m_number = 255;
+        m_kart->getTeamRoster().setActiveRiderPowerup(m_type, m_number);
         return;
     }
     m_type=type;
@@ -192,6 +195,7 @@ void Powerup::set(PowerupManager::PowerupType type, int n)
             break ;
     }
 
+    m_kart->getTeamRoster().setActiveRiderPowerup(m_type, m_number);
 }  // set
 
 //-----------------------------------------------------------------------------
@@ -204,6 +208,7 @@ void Powerup::setNum(int n)
     if(n>255) n = 255;
 
     m_number=n;
+    m_kart->getTeamRoster().setActiveRiderPowerup(m_type, m_number);
 }
 
 //-----------------------------------------------------------------------------
@@ -493,6 +498,7 @@ void Powerup::use()
         m_number = 0;
         m_type   = PowerupManager::POWERUP_NOTHING;
     }
+    m_kart->getTeamRoster().setActiveRiderPowerup(m_type, m_number);
 }   // use
 
 //-----------------------------------------------------------------------------
@@ -572,6 +578,26 @@ void Powerup::hitBonusBox(const ItemState &item_state)
 
     new_powerup = powerup_manager->getRandomPowerup(position, &n,
                                                     random_number);
+
+    TeamKartRoster& roster = m_kart->getTeamRoster();
+    if (roster.hasTwoRiders() &&
+        m_type != PowerupManager::POWERUP_NOTHING &&
+        new_powerup != PowerupManager::POWERUP_NOTHING)
+    {
+        if (!roster.reserveRiderHasItem())
+        {
+            roster.setReserveRiderPowerup(new_powerup, n);
+            return;
+        }
+        if (roster.getReserveRiderPowerupType() == new_powerup)
+        {
+            int count = roster.getReserveRiderPowerupCount() + (int)n;
+            if (count > MAX_POWERUPS)
+                count = MAX_POWERUPS;
+            roster.setReserveRiderPowerup(new_powerup, count);
+            return;
+        }
+    }
 
     // Always add a new powerup in ITEM_MODE_NEW (or if the kart
     // doesn't have a powerup atm).

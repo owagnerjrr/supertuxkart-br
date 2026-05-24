@@ -135,6 +135,7 @@ Kart::Kart (const std::string& ident, unsigned int world_kart_id,
     m_consumption_per_tick = stk_config->ticks2Time(1) *
                              m_kart_properties->getNitroConsumption();
     m_fire_clicked         = 0;
+    m_swap_riders_clicked  = 0;
     m_default_suspension_force = 0.0f;
     m_boosted_ai           = false;
     m_type                 = RaceManager::KT_AI;
@@ -1644,6 +1645,30 @@ void Kart::update(int ticks)
     PROFILER_POP_CPU_MARKER();
 
     if(!m_controls.getFire()) m_fire_clicked = 0;
+
+    if(!m_controls.getSwapRiders()) m_swap_riders_clicked = 0;
+
+    if(m_controls.getSwapRiders() && !m_swap_riders_clicked &&
+       !m_kart_animation)
+    {
+        TeamKartRoster& roster = getTeamRoster();
+        if (roster.hasTwoRiders())
+        {
+            const PowerupManager::PowerupType active_type =
+                m_powerup->getType();
+            const int active_count = m_powerup->getNum();
+            const PowerupManager::PowerupType reserve_type =
+                roster.getReserveRiderPowerupType();
+            const int reserve_count = roster.getReserveRiderPowerupCount();
+
+            roster.setActiveRiderPowerup(active_type, active_count);
+            swapTeamRiders();
+            m_powerup->set(reserve_type, reserve_count);
+            roster.setReserveRiderPowerup(active_type, active_count);
+        }
+        m_swap_riders_clicked = 1;
+        m_controls.setSwapRiders(false);
+    }
 
     if(m_controls.getFire() && !m_fire_clicked && !m_kart_animation)
     {

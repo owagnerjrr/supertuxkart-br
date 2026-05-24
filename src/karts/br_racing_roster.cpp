@@ -119,6 +119,28 @@ BrazilianRacingRoster::getSpeedClass(const std::string& ident)
 }
 
 // ----------------------------------------------------------------------------
+std::string BrazilianRacingRoster::getDefaultPartnerIdent(
+    const std::string& ident)
+{
+    if (ident == "atho")
+        return "popo";
+    if (ident == "popo")
+        return "atho";
+    if (ident == "favela")
+        return "nina";
+    if (ident == "nina")
+        return "favela";
+
+    const std::vector<Character>& characters = getCharacters();
+    for (unsigned int i = 0; i < characters.size(); i++)
+    {
+        if (characters[i].m_ident == ident)
+            return characters[(i + 1) % characters.size()].m_ident;
+    }
+    return std::string();
+}
+
+// ----------------------------------------------------------------------------
 bool BrazilianRacingRoster::isValidTeamSelection(const TeamSelection& selection)
 {
     return getCharacter(selection.m_front_rider_ident) != NULL &&

@@ -9,6 +9,8 @@
 #ifndef HEADER_TEAM_KART_ROSTER_HPP
 #define HEADER_TEAM_KART_ROSTER_HPP
 
+#include "items/powerup_manager.hpp"
+
 #include <string>
 
 class TeamKartRoster
@@ -18,6 +20,8 @@ private:
     {
         bool m_has_item;
         std::string m_item_ident;
+        PowerupManager::PowerupType m_powerup_type;
+        int m_powerup_count;
 
         RiderItemSlot();
     };
@@ -57,6 +61,10 @@ public:
     void setRearRiderItem(const std::string& item_ident);
     void setActiveRiderItem(const std::string& item_ident);
     void setReserveRiderItem(const std::string& item_ident);
+    void setFrontRiderPowerup(PowerupManager::PowerupType type, int count);
+    void setRearRiderPowerup(PowerupManager::PowerupType type, int count);
+    void setActiveRiderPowerup(PowerupManager::PowerupType type, int count);
+    void setReserveRiderPowerup(PowerupManager::PowerupType type, int count);
     void clearFrontRiderItem();
     void clearRearRiderItem();
     void clearActiveRiderItem();
@@ -69,6 +77,14 @@ public:
     const std::string& getRearRiderItemIdent() const;
     const std::string& getActiveRiderItemIdent() const;
     const std::string& getReserveRiderItemIdent() const;
+    PowerupManager::PowerupType getFrontRiderPowerupType() const;
+    PowerupManager::PowerupType getRearRiderPowerupType() const;
+    PowerupManager::PowerupType getActiveRiderPowerupType() const;
+    PowerupManager::PowerupType getReserveRiderPowerupType() const;
+    int getFrontRiderPowerupCount() const;
+    int getRearRiderPowerupCount() const;
+    int getActiveRiderPowerupCount() const;
+    int getReserveRiderPowerupCount() const;
 };
 
 #endif

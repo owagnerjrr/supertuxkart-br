@@ -220,6 +220,9 @@ protected:
     /** True if fire button was pushed and not released */
     bool         m_fire_clicked;
 
+    /** True if rider swap button was pushed and not released */
+    bool         m_swap_riders_clicked;
+
     /** True if the kart has been selected to have a boosted ai */
     bool         m_boosted_ai;
 
