@@ -57,6 +57,12 @@ def material_color(material: bpy.types.Material) -> tuple[float, float, float, f
     return (float(color[0]), float(color[1]), float(color[2]), float(color[3]))
 
 
+def blender_to_stk_axis(vector) -> tuple[float, float, float]:
+    # Blender is Z-up and the authored models face -Y. SuperTuxKart/B3D uses
+    # Y-up with the kart facing +Z, so map Blender X/Z/-Y into STK X/Y/Z.
+    return (float(vector.x), float(vector.z), float(-vector.y))
+
+
 def write_scene_b3d(path: Path, objects: list[bpy.types.Object]) -> None:
     depsgraph = bpy.context.evaluated_depsgraph_get()
     vertices: list[tuple[tuple[float, float, float], tuple[float, float, float]]] = []
@@ -91,8 +97,8 @@ def write_scene_b3d(path: Path, objects: list[bpy.types.Object]) -> None:
                 tri_indices.append(len(vertices))
                 vertices.append(
                     (
-                        (world_pos.x, world_pos.y, world_pos.z),
-                        (world_normal.x, world_normal.y, world_normal.z),
+                        blender_to_stk_axis(world_pos),
+                        blender_to_stk_axis(world_normal),
                     )
                 )
             triangles_by_material.setdefault(mat_name, []).append(tuple(tri_indices))
