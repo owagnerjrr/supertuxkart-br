@@ -51,9 +51,21 @@ Open the `.blend` file and sculpt/refine the collections:
 ## Next Export Step
 
 After the `.blend` looks good, export each selected model to a game-friendly
-format. The current Android prototype still consumes `.b3d`, so the next task is
-to add either:
+format. The current Android prototype still consumes `.b3d`. For the first
+static test export, run:
 
-- a Blender-to-B3D export step, or
-- a Blender-to-glTF/OBJ step followed by a converter into the SuperTuxKart asset
-format used in `stk-assets/karts`.
+```powershell
+blender --background --python art\blender\export_caramelo_dash_b3d.py
+```
+
+This writes:
+
+```text
+../stk-assets/karts/atho/atho_blender_duo.b3d
+../stk-assets/karts/popo/popo_blender_duo.b3d
+../stk-assets/karts/favela/favela_blender_duo.b3d
+../stk-assets/karts/nina/nina_blender_duo.b3d
+```
+
+and updates each local `kart.xml` in `stk-assets`. These generated game assets
+are intentionally not committed to Git.
