@@ -158,7 +158,25 @@ function Import-CharacterIcon([hashtable]$c) {
         (New-Object System.Drawing.Rectangle $x, $y, $side, $side),
         [System.Drawing.GraphicsUnit]::Pixel)
 
+    $band = New-Brush 215 18 18 18
+    $shadow = New-Brush 255 0 0 0
+    $text = New-Brush 255 255 225 130
+    $font = New-Object System.Drawing.Font "Arial", 58, ([System.Drawing.FontStyle]::Bold)
+    $format = New-Object System.Drawing.StringFormat
+    $format.Alignment = [System.Drawing.StringAlignment]::Center
+    $format.LineAlignment = [System.Drawing.StringAlignment]::Center
+    $graphics.FillRectangle($band, 0, 410, 512, 102)
+    $shadowRect = New-Object System.Drawing.RectangleF 4, 414, 512, 92
+    $textRect = New-Object System.Drawing.RectangleF 0, 410, 512, 92
+    $graphics.DrawString($c.Label, $font, $shadow, $shadowRect, $format)
+    $graphics.DrawString($c.Label, $font, $text, $textRect, $format)
+
     $graphics.Dispose()
+    $format.Dispose()
+    $font.Dispose()
+    $text.Dispose()
+    $shadow.Dispose()
+    $band.Dispose()
     Save-Png $bitmap (Join-Path $characterRoot ($c.Id + ".png"))
     $bitmap.Dispose()
     $source.Dispose()

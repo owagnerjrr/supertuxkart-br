@@ -252,7 +252,7 @@ def write_b3d(path, mesh, colors):
         brus += cstr(name)
         brus += struct.pack("<fffffII", r, g, b, a, 0.0, 1, 0)
 
-    vrts = struct.pack("<III", 0, 0, 0)
+    vrts = struct.pack("<III", 1, 0, 0)
     for pos, normal in mesh.vertices:
         vrts += struct.pack("<ffffff", pos[0], pos[1], pos[2], normal[0], normal[1], normal[2])
 
