@@ -128,6 +128,22 @@ def cube(
     return obj
 
 
+def bevelled_cube(
+    coll: bpy.types.Collection,
+    name: str,
+    loc: tuple[float, float, float],
+    scale: tuple[float, float, float],
+    material_name: str,
+    bevel_width: float = 0.12,
+) -> bpy.types.Object:
+    obj = cube(coll, name, loc, scale, material_name)
+    bevel = obj.modifiers.get("soft bevel")
+    if bevel:
+        bevel.width = bevel_width
+        bevel.segments = 12
+    return obj
+
+
 def cone(
     coll: bpy.types.Collection,
     name: str,
@@ -169,11 +185,11 @@ def make_eye_pair(coll: bpy.types.Collection, x: float, y: float, z: float, colo
         uv_sphere(coll, "eye_highlight", (side * x - side * size * 0.12, y - 0.030, z + size * 0.24), (size * 0.10, size * 0.11, size * 0.035), "fur_white")
 
 
-def make_paws(coll: bpy.types.Collection, body_mat: str, length: float, width: float) -> None:
+def make_paws(coll: bpy.types.Collection, body_mat: str, length: float, width: float, z_front: float = 0.30) -> None:
     for x in (-width, width):
-        uv_sphere(coll, "front_paw", (x, -0.34, 0.26), (0.13, 0.08, 0.19), body_mat)
+        uv_sphere(coll, "front_paw", (x, -0.34, z_front), (0.13, 0.08, 0.19), body_mat)
         uv_sphere(coll, "rear_paw", (x * 1.12, -0.38, -0.42), (0.15, 0.08, 0.18), body_mat)
-        cylinder(coll, "front_leg", (x, -0.15, 0.12), 0.070, length, body_mat)
+        cylinder(coll, "front_leg", (x, -0.15, z_front - 0.14), 0.070, length, body_mat)
         cylinder(coll, "rear_leg", (x * 1.12, -0.17, -0.42), 0.082, length * 0.86, body_mat)
 
 
@@ -190,35 +206,37 @@ def make_tail(coll: bpy.types.Collection, body_mat: str, cat: bool) -> None:
 def make_cat(coll: bpy.types.Collection, name: str, body: str, eye: str, chubby: bool = False) -> None:
     sx = 1.20 if chubby else 1.0
     sy = 1.10 if chubby else 1.0
-    uv_sphere(coll, f"{name}_body", (0, -0.08, -0.12), (0.42 * sx, 0.30 * sy, 0.62), body)
-    uv_sphere(coll, f"{name}_head", (0, 0.34, 0.42), (0.38 * sx, 0.33 * sy, 0.32), body)
-    make_eye_pair(coll, 0.16 * sx, 0.13, 0.56, eye, 0.105)
-    uv_sphere(coll, "muzzle", (0, 0.08, 0.68), (0.16, 0.08, 0.09), "fur_white" if chubby else body)
-    uv_sphere(coll, "nose", (0, 0.015, 0.75), (0.060, 0.035, 0.030), "pink" if chubby else "nose")
-    cone(coll, "left_ear", (-0.23 * sx, 0.56, 0.37), 0.13, 0.34, body, (0.25, -0.40, 0.0))
-    cone(coll, "right_ear", (0.23 * sx, 0.56, 0.37), 0.13, 0.34, body, (0.25, 0.40, 0.0))
-    make_paws(coll, body, 0.34, 0.24 * sx)
+    uv_sphere(coll, f"{name}_body", (0, -0.02, -0.10), (0.48 * sx, 0.36 * sy, 0.62), body, 48, 24)
+    uv_sphere(coll, f"{name}_chest", (0, -0.20, 0.20), (0.30 * sx, 0.11, 0.36), "fur_white" if chubby else body, 32, 16)
+    uv_sphere(coll, f"{name}_head", (0, 0.48, 0.44), (0.43 * sx, 0.38 * sy, 0.36), body, 48, 24)
+    make_eye_pair(coll, 0.18 * sx, 0.20, 0.60, eye, 0.130)
+    uv_sphere(coll, "muzzle", (0, 0.12, 0.73), (0.18, 0.10, 0.11), "fur_white" if chubby else body, 32, 16)
+    uv_sphere(coll, "nose", (0, 0.04, 0.83), (0.070, 0.044, 0.036), "pink" if chubby else "nose", 24, 12)
+    cone(coll, "left_ear", (-0.26 * sx, 0.74, 0.39), 0.16, 0.44, body, (0.25, -0.42, 0.0))
+    cone(coll, "right_ear", (0.26 * sx, 0.74, 0.39), 0.16, 0.44, body, (0.25, 0.42, 0.0))
+    make_paws(coll, body, 0.38, 0.26 * sx, 0.34)
     make_tail(coll, body, cat=True)
     if name == "atho":
         cylinder(coll, "red_collar", (0, 0.05, 0.34), 0.30, 0.055, "collar_red", (math.pi / 2, 0, 0))
         cube(coll, "nose_scar", (0.0, -0.030, 0.79), (0.070, 0.010, 0.010), "pink")
     else:
         uv_sphere(coll, "white_chest", (0.0, -0.28, 0.22), (0.26, 0.08, 0.32), "fur_white")
-        uv_sphere(coll, "black_face_patch", (-0.16, 0.10, 0.58), (0.18, 0.045, 0.18), "fur_black")
-        uv_sphere(coll, "orange_face_patch", (0.18, 0.10, 0.57), (0.17, 0.045, 0.18), "calico_orange")
-        uv_sphere(coll, "orange_body_patch", (-0.26, -0.18, -0.02), (0.17, 0.055, 0.24), "calico_orange")
+        uv_sphere(coll, "black_face_patch", (-0.18, 0.18, 0.62), (0.20, 0.055, 0.20), "fur_black", 32, 16)
+        uv_sphere(coll, "orange_face_patch", (0.20, 0.18, 0.61), (0.19, 0.055, 0.20), "calico_orange", 32, 16)
+        uv_sphere(coll, "orange_body_patch", (-0.30, -0.17, -0.02), (0.20, 0.065, 0.27), "calico_orange", 32, 16)
+        uv_sphere(coll, "black_body_patch", (0.30, -0.16, -0.10), (0.18, 0.065, 0.24), "fur_black", 32, 16)
 
 
 def make_dog(coll: bpy.types.Collection, name: str, body: str, eye: str, dark_mask: bool = False) -> None:
-    uv_sphere(coll, f"{name}_body", (0, -0.10, -0.12), (0.46, 0.31, 0.72), body)
-    uv_sphere(coll, f"{name}_head", (0, 0.34, 0.45), (0.39, 0.33, 0.34), body)
-    make_eye_pair(coll, 0.15, 0.12, 0.59, eye, 0.095)
-    uv_sphere(coll, "muzzle", (0, 0.02, 0.72), (0.20, 0.11, 0.12), "fur_tan")
-    uv_sphere(coll, "nose", (0, -0.055, 0.82), (0.090, 0.055, 0.045), "nose")
-    uv_sphere(coll, "tongue", (-0.035, -0.075, 0.74), (0.052, 0.030, 0.11), "pink")
-    uv_sphere(coll, "left_ear", (-0.32, 0.32, 0.36), (0.11, 0.07, 0.26), "fur_dark_brown" if dark_mask else "fur_caramel")
-    uv_sphere(coll, "right_ear", (0.32, 0.32, 0.36), (0.11, 0.07, 0.26), "fur_dark_brown" if dark_mask else "fur_caramel")
-    make_paws(coll, body, 0.40, 0.27)
+    uv_sphere(coll, f"{name}_body", (0, -0.08, -0.10), (0.52, 0.35, 0.72), body, 48, 24)
+    uv_sphere(coll, f"{name}_head", (0, 0.48, 0.47), (0.45, 0.38, 0.37), body, 48, 24)
+    make_eye_pair(coll, 0.17, 0.20, 0.64, eye, 0.120)
+    uv_sphere(coll, "muzzle", (0, 0.08, 0.80), (0.23, 0.13, 0.14), "fur_tan", 32, 16)
+    uv_sphere(coll, "nose", (0, -0.020, 0.91), (0.110, 0.070, 0.055), "nose", 32, 16)
+    uv_sphere(coll, "tongue", (-0.040, -0.060, 0.80), (0.060, 0.036, 0.13), "pink", 24, 12)
+    uv_sphere(coll, "left_ear", (-0.36, 0.43, 0.38), (0.13, 0.08, 0.30), "fur_dark_brown" if dark_mask else "fur_caramel", 32, 16)
+    uv_sphere(coll, "right_ear", (0.36, 0.43, 0.38), (0.13, 0.08, 0.30), "fur_dark_brown" if dark_mask else "fur_caramel", 32, 16)
+    make_paws(coll, body, 0.44, 0.30, 0.36)
     make_tail(coll, body, cat=False)
     uv_sphere(coll, "white_chest", (0.0, -0.31, 0.22), (0.18, 0.08, 0.34), "fur_white")
     if dark_mask:
@@ -229,18 +247,15 @@ def make_dog(coll: bpy.types.Collection, name: str, body: str, eye: str, dark_ma
 
 
 def make_duo_kart(coll: bpy.types.Collection) -> None:
-    cube(coll, "main_rounded_chassis", (0, 0, 0), (0.82, 0.22, 1.05), "kart_green")
-    uv_sphere(coll, "yellow_nose", (0, -0.03, 0.75), (0.46, 0.18, 0.35), "kart_yellow")
-    cube(coll, "front_seat", (0, 0.25, 0.26), (0.35, 0.10, 0.25), "rubber")
-    cube(coll, "rear_seat", (0, 0.27, -0.34), (0.38, 0.10, 0.28), "rubber")
-    cylinder(coll, "roll_bar_left", (-0.32, 0.49, -0.08), 0.030, 0.70, "metal", (0.0, 0.0, 0.0))
-    cylinder(coll, "roll_bar_right", (0.32, 0.49, -0.08), 0.030, 0.70, "metal", (0.0, 0.0, 0.0))
-    cylinder(coll, "front_axle", (0, -0.18, 0.56), 0.035, 1.20, "metal", (0, math.pi / 2, 0))
-    cylinder(coll, "rear_axle", (0, -0.18, -0.62), 0.035, 1.28, "metal", (0, math.pi / 2, 0))
-    for x in (-0.68, 0.68):
-        for z in (0.56, -0.62):
-            cylinder(coll, "wheel", (x, -0.18, z), 0.17, 0.16, "rubber", (0, math.pi / 2, 0))
-            cylinder(coll, "wheel_hub", (x, -0.18, z), 0.075, 0.175, "kart_red", (0, math.pi / 2, 0))
+    bevelled_cube(coll, "main_rounded_chassis", (0, 0.12, -0.03), (0.54, 0.16, 0.72), "kart_green", 0.18)
+    uv_sphere(coll, "yellow_nose", (0, 0.13, 0.54), (0.38, 0.15, 0.28), "kart_yellow", 48, 20)
+    uv_sphere(coll, "rear_engine_cover", (0, 0.17, -0.58), (0.34, 0.14, 0.20), "kart_red", 40, 18)
+    bevelled_cube(coll, "front_seat_bucket", (0, 0.32, 0.18), (0.28, 0.070, 0.20), "rubber", 0.08)
+    bevelled_cube(coll, "rear_seat_bucket", (0, 0.34, -0.28), (0.30, 0.075, 0.22), "rubber", 0.08)
+    cylinder(coll, "left_side_rail", (-0.43, 0.24, -0.06), 0.030, 1.24, "metal", (math.pi / 2, 0, 0))
+    cylinder(coll, "right_side_rail", (0.43, 0.24, -0.06), 0.030, 1.24, "metal", (math.pi / 2, 0, 0))
+    cylinder(coll, "front_axle", (0, 0.16, 0.43), 0.035, 0.92, "metal", (0, math.pi / 2, 0))
+    cylinder(coll, "rear_axle", (0, 0.18, -0.45), 0.035, 0.98, "metal", (0, math.pi / 2, 0))
 
 
 def add_reference_layout() -> None:

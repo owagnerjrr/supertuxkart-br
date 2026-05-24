@@ -79,6 +79,7 @@ android/sdk-packages.txt
 *.apk
 *.keystore
 apk-output-*/
+*.blend1
 
 dependencies-android-src.tar.xz
 

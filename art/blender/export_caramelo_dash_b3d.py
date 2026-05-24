@@ -168,11 +168,11 @@ def export_team(module, ident: str, front_ident: str, rear_ident: str) -> None:
 
     front = module.collection(f"front_{front_ident}")
     add_pet(module, front_ident, front)
-    transform_collection(front, (0.0, 0.28, 0.18), 0.43)
+    transform_collection(front, (0.0, 0.42, 0.16), 0.62)
 
     rear = module.collection(f"rear_{rear_ident}")
     add_pet(module, rear_ident, rear)
-    transform_collection(rear, (0.0, 0.31, -0.40), 0.36)
+    transform_collection(rear, (0.0, 0.44, -0.30), 0.54)
 
     objects = list(kart_coll.objects) + list(front.objects) + list(rear.objects)
     target_dir = ASSETS / "karts" / ident
