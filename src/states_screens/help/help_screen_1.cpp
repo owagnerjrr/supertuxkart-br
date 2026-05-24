@@ -43,18 +43,13 @@ void HelpScreen1::loadedFromFile()
 
 void HelpScreen1::beforeAddingWidget()
 {
-#ifdef ANDROID
-    if (SDL_IsAndroidTV())
-    {
-        Widget* tutorial = getWidget("startTutorial");
-        if (tutorial)
-            tutorial->setVisible(false);
+    Widget* tutorial = getWidget("startTutorial");
+    if (tutorial)
+        tutorial->setVisible(false);
 
-        Widget* tutorial_icon = getWidget("tutorialIcon");
-        if (tutorial_icon)
-            tutorial_icon->setVisible(false);
-    }
-#endif
+    Widget* tutorial_icon = getWidget("tutorialIcon");
+    if (tutorial_icon)
+        tutorial_icon->setVisible(false);
 }
 
 void HelpScreen1::eventCallback(Widget* widget, const std::string& name, const int playerID)
@@ -84,8 +79,8 @@ void HelpScreen1::init()
     RibbonWidget* w = this->getWidget<RibbonWidget>("category");
     ButtonWidget* tutorial = getWidget<ButtonWidget>("startTutorial");
 
-    tutorial->setActive(StateManager::get()->getGameState() !=
-                                                       GUIEngine::INGAME_MENU);
+    if (tutorial)
+        tutorial->setActive(false);
 
     if (w != NULL)
     {

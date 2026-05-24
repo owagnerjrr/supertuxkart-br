@@ -313,7 +313,7 @@ RaceManager::Difficulty
  */
 void RaceManager::setDifficulty(Difficulty diff)
 {
-    m_difficulty = diff;
+    m_difficulty = DIFFICULTY_MEDIUM;
 }   // setDifficulty
 
 //---------------------------------------------------------------------------------------------

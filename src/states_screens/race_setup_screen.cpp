@@ -38,15 +38,8 @@ void RaceSetupScreen::init()
     UserConfigParams::m_game_mode = CONFIG_CODE_NORMAL;
     RaceManager::get()->setNumKarts(UserConfigParams::m_default_num_karts);
 
-    RibbonWidget* w = getWidget<RibbonWidget>("difficulty");
-    assert(w != NULL);
-
-    if (UserConfigParams::m_difficulty == RaceManager::DIFFICULTY_EASY)
-        w->setSelection(0, PLAYER_ID_GAME_MASTER);
-    else if (UserConfigParams::m_difficulty == RaceManager::DIFFICULTY_MEDIUM)
-        w->setSelection(1, PLAYER_ID_GAME_MASTER);
-    else
-        w->setSelection(2, PLAYER_ID_GAME_MASTER);
+    UserConfigParams::m_difficulty = RaceManager::DIFFICULTY_MEDIUM;
+    RaceManager::get()->setDifficulty(RaceManager::DIFFICULTY_MEDIUM);
 }   // init
 
 // -----------------------------------------------------------------------------
@@ -71,19 +64,8 @@ void RaceSetupScreen::eventCallback(Widget* widget, const std::string& name,
 // -----------------------------------------------------------------------------
 void RaceSetupScreen::assignDifficulty()
 {
-    RibbonWidget* difficulty_widget = getWidget<RibbonWidget>("difficulty");
-    assert(difficulty_widget != NULL);
-    const std::string& difficulty =
-        difficulty_widget->getSelectionIDString(PLAYER_ID_GAME_MASTER);
-
-    RaceManager::Difficulty diff = RaceManager::DIFFICULTY_HARD;
-    if (difficulty == "novice")
-        diff = RaceManager::DIFFICULTY_EASY;
-    else if (difficulty == "intermediate")
-        diff = RaceManager::DIFFICULTY_MEDIUM;
-
-    UserConfigParams::m_difficulty = diff;
-    RaceManager::get()->setDifficulty(diff);
+    UserConfigParams::m_difficulty = RaceManager::DIFFICULTY_MEDIUM;
+    RaceManager::get()->setDifficulty(RaceManager::DIFFICULTY_MEDIUM);
 }   // assignDifficulty
 
 // -----------------------------------------------------------------------------
