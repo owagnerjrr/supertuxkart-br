@@ -163,6 +163,9 @@ def set_kart_model_xml(kart_xml: Path, model_file: str) -> None:
     tree = ET.parse(kart_xml)
     root = tree.getroot()
     root.set("model-file", model_file)
+    for tag in ["wheels", "headlights", "speed-weighted-objects"]:
+        for child in list(root.findall(tag)):
+            root.remove(child)
     tree.write(kart_xml, encoding="utf-8", xml_declaration=True)
 
 

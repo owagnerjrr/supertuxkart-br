@@ -247,15 +247,15 @@ def make_dog(coll: bpy.types.Collection, name: str, body: str, eye: str, dark_ma
 
 
 def make_duo_kart(coll: bpy.types.Collection) -> None:
-    bevelled_cube(coll, "main_rounded_chassis", (0, 0.12, -0.03), (0.54, 0.16, 0.72), "kart_green", 0.18)
-    uv_sphere(coll, "yellow_nose", (0, 0.13, 0.54), (0.38, 0.15, 0.28), "kart_yellow", 48, 20)
-    uv_sphere(coll, "rear_engine_cover", (0, 0.17, -0.58), (0.34, 0.14, 0.20), "kart_red", 40, 18)
-    bevelled_cube(coll, "front_seat_bucket", (0, 0.32, 0.18), (0.28, 0.070, 0.20), "rubber", 0.08)
-    bevelled_cube(coll, "rear_seat_bucket", (0, 0.34, -0.28), (0.30, 0.075, 0.22), "rubber", 0.08)
-    cylinder(coll, "left_side_rail", (-0.43, 0.24, -0.06), 0.030, 1.24, "metal", (math.pi / 2, 0, 0))
-    cylinder(coll, "right_side_rail", (0.43, 0.24, -0.06), 0.030, 1.24, "metal", (math.pi / 2, 0, 0))
-    cylinder(coll, "front_axle", (0, 0.16, 0.43), 0.035, 0.92, "metal", (0, math.pi / 2, 0))
-    cylinder(coll, "rear_axle", (0, 0.18, -0.45), 0.035, 0.98, "metal", (0, math.pi / 2, 0))
+    bevelled_cube(coll, "main_rounded_chassis", (0, 0.08, -0.05), (0.58, 0.14, 0.76), "kart_green", 0.20)
+    uv_sphere(coll, "yellow_nose", (0, 0.10, 0.56), (0.40, 0.13, 0.25), "kart_yellow", 48, 20)
+    uv_sphere(coll, "rear_engine_cover", (0, 0.13, -0.58), (0.36, 0.12, 0.18), "kart_red", 40, 18)
+    bevelled_cube(coll, "front_seat_bucket", (0, 0.25, 0.18), (0.30, 0.055, 0.20), "rubber", 0.08)
+    bevelled_cube(coll, "rear_seat_bucket", (0, 0.27, -0.28), (0.32, 0.055, 0.22), "rubber", 0.08)
+    for x in (-0.55, 0.55):
+        for z in (0.44, -0.48):
+            cylinder(coll, "decor_wheel", (x, 0.02, z), 0.18, 0.12, "rubber", (0, math.pi / 2, 0))
+            cylinder(coll, "decor_wheel_hub", (x, 0.02, z), 0.085, 0.13, "metal", (0, math.pi / 2, 0))
 
 
 def add_reference_layout() -> None:
