@@ -227,6 +227,13 @@ def prefixed_colors(prefix, colors):
     return {f"{prefix}{name}": value for name, value in colors.items()}
 
 
+def scale_mesh(mesh, factor):
+    mesh.vertices = [
+        ((pos[0] * factor, pos[1] * factor, pos[2] * factor), normal)
+        for pos, normal in mesh.vertices
+    ]
+
+
 def add_cone(mesh, material, base_center, radius, height, axis="y", segments=14, tilt_x=0.0):
     bx, by, bz = base_center
     tip = (bx + tilt_x, by + height, bz)
@@ -330,11 +337,11 @@ def add_kart_shell(mesh, style):
     add_ellipsoid(mesh, "kart_metal", (0.0, 0.86, 0.16), (0.47, 0.035, 0.045), 4, 14)
     add_ellipsoid(mesh, "kart_metal", (0.0, 0.91, -0.37), (0.49, 0.035, 0.045), 4, 14)
 
-    for x in (-0.58, 0.58):
+    for x in (-0.52, 0.52):
         for z, radius in ((0.50, 0.21), (-0.58, 0.23)):
-            add_ellipsoid(mesh, "kart_wheel", (x, 0.18, z), (0.13, radius, radius), 9, 18)
-            add_ellipsoid(mesh, "kart_hub", (x * 1.01, 0.18, z), (0.145, radius * 0.40, radius * 0.40), 6, 12)
-            add_ellipsoid(mesh, "kart_trim", (x * 0.88, 0.40, z), (0.22, 0.055, 0.27), 4, 12)
+            add_ellipsoid(mesh, "kart_wheel", (x, 0.17, z), (0.105, radius * 0.92, radius * 0.92), 8, 16)
+            add_ellipsoid(mesh, "kart_hub", (x * 1.01, 0.17, z), (0.118, radius * 0.35, radius * 0.35), 5, 10)
+            add_ellipsoid(mesh, "kart_trim", (x * 0.88, 0.36, z), (0.17, 0.045, 0.22), 4, 10)
 
     add_ellipsoid(mesh, "kart_metal", (0.0, 0.28, 0.50), (0.64, 0.035, 0.040), 4, 12)
     add_ellipsoid(mesh, "kart_metal", (0.0, 0.30, -0.58), (0.68, 0.035, 0.040), 4, 12)
@@ -430,8 +437,9 @@ def build_pet_mesh(character):
 def build_team_kart_mesh(character, partner, style=None):
     mesh = Mesh()
     add_kart_shell(mesh, style)
-    merge_mesh(mesh, build_pet_mesh(character), offset=(0.0, 0.47, 0.24), scale=0.58, material_prefix="front_")
-    merge_mesh(mesh, build_pet_mesh(partner), offset=(0.0, 0.50, -0.38), scale=0.49, material_prefix="rear_")
+    merge_mesh(mesh, build_pet_mesh(character), offset=(0.0, 0.44, 0.25), scale=0.48, material_prefix="front_")
+    merge_mesh(mesh, build_pet_mesh(partner), offset=(0.0, 0.47, -0.38), scale=0.40, material_prefix="rear_")
+    scale_mesh(mesh, 0.84)
     return mesh
 
 
