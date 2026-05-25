@@ -53,7 +53,9 @@ def reset_scene() -> None:
 def material(name: str, color: tuple[float, float, float, float]) -> bpy.types.Material:
     mat = bpy.data.materials.new(name)
     mat.use_nodes = True
-    bsdf = mat.node_tree.nodes.get("Principled BSDF")
+    bsdf = next((node for node in mat.node_tree.nodes if node.type == "BSDF_PRINCIPLED"), None)
+    if bsdf is None:
+        bsdf = mat.node_tree.nodes.new(type="ShaderNodeBsdfPrincipled")
     bsdf.inputs["Base Color"].default_value = color
     bsdf.inputs["Roughness"].default_value = 0.68
     return mat
@@ -247,15 +249,27 @@ def make_dog(coll: bpy.types.Collection, name: str, body: str, eye: str, dark_ma
 
 
 def make_duo_kart(coll: bpy.types.Collection) -> None:
-    bevelled_cube(coll, "main_rounded_chassis", (0, 0.08, -0.05), (0.58, 0.14, 0.76), "kart_green", 0.20)
-    uv_sphere(coll, "yellow_nose", (0, 0.10, 0.56), (0.40, 0.13, 0.25), "kart_yellow", 48, 20)
-    uv_sphere(coll, "rear_engine_cover", (0, 0.13, -0.58), (0.36, 0.12, 0.18), "kart_red", 40, 18)
-    bevelled_cube(coll, "front_seat_bucket", (0, 0.25, 0.18), (0.30, 0.055, 0.20), "rubber", 0.08)
-    bevelled_cube(coll, "rear_seat_bucket", (0, 0.27, -0.28), (0.32, 0.055, 0.22), "rubber", 0.08)
+    bevelled_cube(coll, "low_rounded_chassis", (0, 0.08, -0.05), (0.66, 0.13, 0.88), "kart_green", 0.20)
+    bevelled_cube(coll, "dark_lower_tub", (0, 0.03, -0.07), (0.52, 0.08, 0.68), "rubber", 0.14)
+    uv_sphere(coll, "yellow_front_nose", (0, 0.16, 0.70), (0.43, 0.15, 0.28), "kart_yellow", 48, 20)
+    uv_sphere(coll, "rear_engine_cover", (0, 0.16, -0.62), (0.38, 0.13, 0.22), "kart_red", 40, 18)
+    bevelled_cube(coll, "front_seat_bucket", (0, 0.30, 0.20), (0.31, 0.060, 0.22), "rubber", 0.08)
+    bevelled_cube(coll, "rear_seat_bucket", (0, 0.33, -0.34), (0.33, 0.060, 0.24), "rubber", 0.08)
+    uv_sphere(coll, "small_windshield", (0, 0.50, 0.54), (0.30, 0.045, 0.055), "metal", 32, 12)
+    bevelled_cube(coll, "front_number_plate", (0, 0.22, 0.98), (0.22, 0.040, 0.030), "fur_white", 0.03)
+
+    for z, y, width in ((0.16, 0.72, 0.46), (-0.38, 0.78, 0.50)):
+        for x in (-width, width):
+            cylinder(coll, "roll_bar_post", (x, y - 0.16, z), 0.045, 0.32, "metal", (math.pi / 2, 0, 0))
+        cylinder(coll, "roll_bar_top", (0, y, z), 0.040, width * 2.0, "metal", (0, math.pi / 2, 0))
+
     for x in (-0.55, 0.55):
         for z in (0.44, -0.48):
-            cylinder(coll, "decor_wheel", (x, 0.02, z), 0.18, 0.12, "rubber", (0, math.pi / 2, 0))
-            cylinder(coll, "decor_wheel_hub", (x, 0.02, z), 0.085, 0.13, "metal", (0, math.pi / 2, 0))
+            cylinder(coll, "chunky_wheel", (x, 0.10, z), 0.21, 0.14, "rubber", (0, math.pi / 2, 0))
+            cylinder(coll, "bright_wheel_hub", (x, 0.10, z), 0.090, 0.15, "metal", (0, math.pi / 2, 0))
+            uv_sphere(coll, "rounded_fender", (x * 0.88, 0.33, z), (0.22, 0.055, 0.27), "kart_red", 24, 10)
+    cylinder(coll, "front_axle", (0, 0.13, 0.44), 0.035, 1.18, "metal", (0, math.pi / 2, 0))
+    cylinder(coll, "rear_axle", (0, 0.13, -0.48), 0.035, 1.22, "metal", (0, math.pi / 2, 0))
 
 
 def add_reference_layout() -> None:

@@ -69,3 +69,59 @@ This writes:
 
 and updates each local `kart.xml` in `stk-assets`. These generated game assets
 are intentionally not committed to Git.
+
+## STK Coordinate Notes
+
+The Caramelo Dash Blender script authors the model numerically in the same
+coordinate convention used by SuperTuxKart:
+
+- `X`: left/right.
+- `Y`: up/down.
+- `Z`: front/back, with positive `Z` toward the kart front.
+
+Do not apply a second Blender Z-up to STK Y-up conversion in
+`export_caramelo_dash_b3d.py`. That makes the exported model vertical on the
+wrong axis and places much of the kart below the selection-screen ground plane.
+
+Use this check after exporting:
+
+```powershell
+.\tools\inspect_b3d_bounds.ps1 ..\stk-assets\karts\atho\atho_blender_duo.b3d
+```
+
+A healthy current export is roughly:
+
+```text
+Width  = 1.23
+Height = 1.17
+Length = 1.83
+MinY   = -0.16
+MaxY   = 1.01
+```
+
+Official STK karts use `*.spm` as the main `model-file` and keep wheels,
+headlights, hats, and animated selection frames as separate XML/bone-driven
+data. The current Caramelo Dash Blender export is a static `*.b3d`, so the
+exporter removes `animations`, `wheels`, `headlights`, `speed-weighted-objects`,
+and `hat` nodes from copied official `kart.xml` files to avoid stale bones and
+selection animations from the source kart.
+
+## Double-Driver Reference Notes
+
+The `doldecomp/mkdd` project was used as a structural reference only. Do not
+copy model data, textures, names, meshes, or proprietary assets from Mario Kart:
+Double Dash.
+
+Useful takeaways from the decompiled structure:
+
+- `KartInfo` stores two characters per kart and default partner pairings.
+- `KartLoader` builds separate driver models, body model, wheel models, arm
+  models, shock models, and shadow model.
+- `CharacterSelect3D` has independent selection-screen scale/pose tables for
+  characters, kart bodies, arms, dumps, and tires.
+- Karts are grouped by light/normal/heavy weight and may have four or six
+  wheels.
+
+Caramelo Dash should mirror the readable layout, not the assets: tandem seats,
+two visible riders, oversized readable wheels/fenders, clear body color coding,
+and character-specific silhouettes.

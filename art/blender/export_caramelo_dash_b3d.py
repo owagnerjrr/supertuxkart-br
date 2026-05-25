@@ -49,7 +49,7 @@ def chunk(tag: str, payload: bytes) -> bytes:
 
 def material_color(material: bpy.types.Material) -> tuple[float, float, float, float]:
     if material.use_nodes:
-        bsdf = material.node_tree.nodes.get("Principled BSDF")
+        bsdf = next((node for node in material.node_tree.nodes if node.type == "BSDF_PRINCIPLED"), None)
         if bsdf:
             color = bsdf.inputs["Base Color"].default_value
             return (float(color[0]), float(color[1]), float(color[2]), float(color[3]))
@@ -58,9 +58,9 @@ def material_color(material: bpy.types.Material) -> tuple[float, float, float, f
 
 
 def blender_to_stk_axis(vector) -> tuple[float, float, float]:
-    # Blender is Z-up and the authored models face -Y. SuperTuxKart/B3D uses
-    # Y-up with the kart facing +Z, so map Blender X/Z/-Y into STK X/Y/Z.
-    return (float(vector.x), float(vector.z), float(-vector.y))
+    # The Caramelo Dash modeling script authors vertices directly in STK's
+    # coordinate convention: X is lateral, Y is up, and Z is forward.
+    return (float(vector.x), float(vector.y), float(vector.z))
 
 
 def write_scene_b3d(path: Path, objects: list[bpy.types.Object]) -> None:
@@ -105,35 +105,35 @@ def write_scene_b3d(path: Path, objects: list[bpy.types.Object]) -> None:
         evaluated.to_mesh_clear()
 
     material_names = list(material_colors.keys())
-    brus = struct.pack("<I", 0)
+    brus = bytearray(struct.pack("<I", 0))
     for name in material_names:
         r, g, b, a = material_colors[name]
-        brus += cstr(name)
-        brus += struct.pack("<fffffII", r, g, b, a, 0.0, 1, 0)
+        brus.extend(cstr(name))
+        brus.extend(struct.pack("<fffffII", r, g, b, a, 0.0, 1, 0))
 
-    vrts = struct.pack("<III", 1, 0, 0)
+    vrts = bytearray(struct.pack("<III", 1, 0, 0))
     for pos, normal in vertices:
-        vrts += struct.pack("<ffffff", pos[0], pos[1], pos[2], normal[0], normal[1], normal[2])
+        vrts.extend(struct.pack("<ffffff", pos[0], pos[1], pos[2], normal[0], normal[1], normal[2]))
 
-    mesh_payload = struct.pack("<i", -1)
-    mesh_payload += chunk("VRTS", vrts)
+    mesh_payload = bytearray(struct.pack("<i", -1))
+    mesh_payload.extend(chunk("VRTS", bytes(vrts)))
     material_id_by_name = {name: idx for idx, name in enumerate(material_names)}
     for name, tris in triangles_by_material.items():
-        payload = struct.pack("<i", material_id_by_name[name])
+        payload = bytearray(struct.pack("<i", material_id_by_name[name]))
         for tri in tris:
-            payload += struct.pack("<III", tri[0], tri[1], tri[2])
-        mesh_payload += chunk("TRIS", payload)
+            payload.extend(struct.pack("<III", tri[0], tri[1], tri[2]))
+        mesh_payload.extend(chunk("TRIS", bytes(payload)))
 
-    node_payload = cstr("caramelo_blender_duo")
-    node_payload += struct.pack("<fff", 0.0, 0.0, 0.0)
-    node_payload += struct.pack("<fff", 1.0, 1.0, 1.0)
-    node_payload += struct.pack("<ffff", 1.0, 0.0, 0.0, 0.0)
-    node_payload += chunk("MESH", mesh_payload)
+    node_payload = bytearray(cstr("caramelo_blender_duo"))
+    node_payload.extend(struct.pack("<fff", 0.0, 0.0, 0.0))
+    node_payload.extend(struct.pack("<fff", 1.0, 1.0, 1.0))
+    node_payload.extend(struct.pack("<ffff", 1.0, 0.0, 0.0, 0.0))
+    node_payload.extend(chunk("MESH", bytes(mesh_payload)))
 
-    bb3d = struct.pack("<I", 1)
-    bb3d += chunk("BRUS", brus)
-    bb3d += chunk("NODE", node_payload)
-    path.write_bytes(chunk("BB3D", bb3d))
+    bb3d = bytearray(struct.pack("<I", 1))
+    bb3d.extend(chunk("BRUS", bytes(brus)))
+    bb3d.extend(chunk("NODE", bytes(node_payload)))
+    path.write_bytes(chunk("BB3D", bytes(bb3d)))
 
 
 def transform_collection(coll: bpy.types.Collection, loc, scale) -> None:
@@ -163,7 +163,7 @@ def set_kart_model_xml(kart_xml: Path, model_file: str) -> None:
     tree = ET.parse(kart_xml)
     root = tree.getroot()
     root.set("model-file", model_file)
-    for tag in ["wheels", "headlights", "speed-weighted-objects"]:
+    for tag in ["animations", "wheels", "headlights", "speed-weighted-objects", "hat"]:
         for child in list(root.findall(tag)):
             root.remove(child)
     tree.write(kart_xml, encoding="utf-8", xml_declaration=True)

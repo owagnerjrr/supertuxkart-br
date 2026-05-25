@@ -98,10 +98,46 @@ DEFAULT_PARTNERS = {
 
 KART_COLORS = {
     "kart_body": (0.04, 0.48, 0.26, 1.0),
+    "kart_body_dark": (0.02, 0.26, 0.16, 1.0),
     "kart_nose": (0.96, 0.84, 0.24, 1.0),
     "kart_trim": (0.94, 0.08, 0.06, 1.0),
     "kart_seat": (0.035, 0.032, 0.030, 1.0),
     "kart_metal": (0.72, 0.72, 0.68, 1.0),
+    "kart_wheel": (0.015, 0.014, 0.013, 1.0),
+    "kart_hub": (0.82, 0.82, 0.76, 1.0),
+    "kart_glass": (0.38, 0.76, 0.95, 0.86),
+    "kart_plate": (1.0, 0.97, 0.78, 1.0),
+}
+
+KART_STYLES = {
+    "atho": {
+        "body": (0.03, 0.08, 0.10, 1.0),
+        "body_dark": (0.01, 0.018, 0.024, 1.0),
+        "nose": (1.0, 0.66, 0.06, 1.0),
+        "trim": (0.82, 0.04, 0.03, 1.0),
+        "accent": (0.96, 0.92, 0.70, 1.0),
+    },
+    "popo": {
+        "body": (0.98, 0.55, 0.16, 1.0),
+        "body_dark": (0.36, 0.22, 0.12, 1.0),
+        "nose": (1.0, 0.92, 0.72, 1.0),
+        "trim": (0.05, 0.04, 0.035, 1.0),
+        "accent": (0.96, 0.38, 0.14, 1.0),
+    },
+    "favela": {
+        "body": (0.04, 0.48, 0.26, 1.0),
+        "body_dark": (0.02, 0.28, 0.16, 1.0),
+        "nose": (1.0, 0.83, 0.12, 1.0),
+        "trim": (0.90, 0.06, 0.04, 1.0),
+        "accent": (0.96, 0.68, 0.28, 1.0),
+    },
+    "nina": {
+        "body": (0.10, 0.30, 0.52, 1.0),
+        "body_dark": (0.035, 0.10, 0.18, 1.0),
+        "nose": (0.78, 0.44, 0.20, 1.0),
+        "trim": (0.86, 0.08, 0.16, 1.0),
+        "accent": (0.94, 0.72, 0.42, 1.0),
+    },
 }
 
 
@@ -274,17 +310,45 @@ def add_cartoon_paw(mesh, material, center, scale, toe_material=None):
             add_ellipsoid(mesh, toe_material, (cx + tx * scale, cy + 0.025 * scale, cz + 0.075 * scale), (0.018 * scale, 0.012 * scale, 0.012 * scale), 3, 8)
 
 
-def add_kart_shell(mesh):
-    # Original two-seat test kart: compact green/yellow shell with tandem seats.
-    add_ellipsoid(mesh, "kart_body", (0.0, 0.32, -0.06), (0.62, 0.19, 0.86), 8, 18)
-    add_ellipsoid(mesh, "kart_nose", (0.0, 0.31, 0.67), (0.38, 0.15, 0.28), 7, 16)
-    add_ellipsoid(mesh, "kart_trim", (0.0, 0.44, 0.03), (0.66, 0.035, 0.72), 4, 18)
-    add_ellipsoid(mesh, "kart_seat", (0.0, 0.50, 0.22), (0.28, 0.08, 0.20), 5, 14)
-    add_ellipsoid(mesh, "kart_seat", (0.0, 0.52, -0.30), (0.30, 0.08, 0.22), 5, 14)
-    add_ellipsoid(mesh, "kart_metal", (-0.42, 0.34, 0.47), (0.08, 0.05, 0.23), 5, 12)
-    add_ellipsoid(mesh, "kart_metal", (0.42, 0.34, 0.47), (0.08, 0.05, 0.23), 5, 12)
-    add_ellipsoid(mesh, "kart_metal", (-0.48, 0.28, -0.52), (0.08, 0.05, 0.25), 5, 12)
-    add_ellipsoid(mesh, "kart_metal", (0.48, 0.28, -0.52), (0.08, 0.05, 0.25), 5, 12)
+def add_kart_shell(mesh, style):
+    # Double-driver silhouette: low toy-like chassis, tandem seats, oversized wheels,
+    # and clear fenders. Original geometry, inspired only by the gameplay layout.
+    add_ellipsoid(mesh, "kart_body", (0.0, 0.26, -0.06), (0.66, 0.17, 0.92), 8, 20)
+    add_ellipsoid(mesh, "kart_body_dark", (0.0, 0.22, -0.08), (0.54, 0.10, 0.74), 5, 18)
+    add_ellipsoid(mesh, "kart_nose", (0.0, 0.31, 0.72), (0.42, 0.16, 0.30), 7, 18)
+    add_ellipsoid(mesh, "kart_trim", (0.0, 0.43, 0.10), (0.69, 0.035, 0.78), 4, 20)
+    add_ellipsoid(mesh, "kart_plate", (0.0, 0.38, 0.98), (0.24, 0.055, 0.035), 3, 10)
+
+    add_ellipsoid(mesh, "kart_seat", (0.0, 0.49, 0.24), (0.31, 0.075, 0.22), 5, 14)
+    add_ellipsoid(mesh, "kart_seat", (0.0, 0.52, -0.34), (0.33, 0.078, 0.24), 5, 14)
+    add_ellipsoid(mesh, "kart_glass", (0.0, 0.55, 0.55), (0.29, 0.055, 0.045), 4, 12)
+
+    for x in (-0.45, 0.45):
+        add_ellipsoid(mesh, "kart_metal", (x, 0.58, 0.16), (0.055, 0.30, 0.045), 5, 10)
+        add_ellipsoid(mesh, "kart_metal", (x, 0.62, -0.37), (0.055, 0.32, 0.045), 5, 10)
+    add_ellipsoid(mesh, "kart_metal", (0.0, 0.86, 0.16), (0.47, 0.035, 0.045), 4, 14)
+    add_ellipsoid(mesh, "kart_metal", (0.0, 0.91, -0.37), (0.49, 0.035, 0.045), 4, 14)
+
+    for x in (-0.58, 0.58):
+        for z, radius in ((0.50, 0.21), (-0.58, 0.23)):
+            add_ellipsoid(mesh, "kart_wheel", (x, 0.18, z), (0.13, radius, radius), 9, 18)
+            add_ellipsoid(mesh, "kart_hub", (x * 1.01, 0.18, z), (0.145, radius * 0.40, radius * 0.40), 6, 12)
+            add_ellipsoid(mesh, "kart_trim", (x * 0.88, 0.40, z), (0.22, 0.055, 0.27), 4, 12)
+
+    add_ellipsoid(mesh, "kart_metal", (0.0, 0.28, 0.50), (0.64, 0.035, 0.040), 4, 12)
+    add_ellipsoid(mesh, "kart_metal", (0.0, 0.30, -0.58), (0.68, 0.035, 0.040), 4, 12)
+    add_ellipsoid(mesh, "kart_trim", (-0.43, 0.42, 0.74), (0.08, 0.055, 0.18), 4, 10)
+    add_ellipsoid(mesh, "kart_trim", (0.43, 0.42, 0.74), (0.08, 0.055, 0.18), 4, 10)
+
+    if style:
+        for material, key in [
+            ("kart_body", "body"),
+            ("kart_body_dark", "body_dark"),
+            ("kart_nose", "nose"),
+            ("kart_trim", "trim"),
+            ("kart_plate", "accent"),
+        ]:
+            KART_COLORS[material] = style[key]
 
 
 def build_pet_mesh(character):
@@ -370,11 +434,11 @@ def build_pet_mesh(character):
     return mesh
 
 
-def build_team_kart_mesh(character, partner):
+def build_team_kart_mesh(character, partner, style=None):
     mesh = Mesh()
-    add_kart_shell(mesh)
-    merge_mesh(mesh, build_pet_mesh(character), offset=(0.0, 0.28, 0.18), scale=0.48, material_prefix="front_")
-    merge_mesh(mesh, build_pet_mesh(partner), offset=(0.0, 0.30, -0.34), scale=0.40, material_prefix="rear_")
+    add_kart_shell(mesh, style)
+    merge_mesh(mesh, build_pet_mesh(character), offset=(0.0, 0.42, 0.18), scale=0.44, material_prefix="front_")
+    merge_mesh(mesh, build_pet_mesh(partner), offset=(0.0, 0.45, -0.37), scale=0.37, material_prefix="rear_")
     return mesh
 
 
@@ -389,37 +453,37 @@ def chunk(tag, payload):
 def write_b3d(path, mesh, colors):
     material_names = list(colors.keys())
 
-    brus = struct.pack("<I", 0)
+    brus = bytearray(struct.pack("<I", 0))
     for name in material_names:
         r, g, b, a = colors[name]
-        brus += cstr(name)
-        brus += struct.pack("<fffffII", r, g, b, a, 0.0, 1, 0)
+        brus.extend(cstr(name))
+        brus.extend(struct.pack("<fffffII", r, g, b, a, 0.0, 1, 0))
 
-    vrts = struct.pack("<III", 1, 0, 0)
+    vrts = bytearray(struct.pack("<III", 1, 0, 0))
     for pos, normal in mesh.vertices:
-        vrts += struct.pack("<ffffff", pos[0], pos[1], pos[2], normal[0], normal[1], normal[2])
+        vrts.extend(struct.pack("<ffffff", pos[0], pos[1], pos[2], normal[0], normal[1], normal[2]))
 
-    mesh_payload = struct.pack("<i", -1)
-    mesh_payload += chunk("VRTS", vrts)
+    mesh_payload = bytearray(struct.pack("<i", -1))
+    mesh_payload.extend(chunk("VRTS", bytes(vrts)))
     for material_id, name in enumerate(material_names):
         tris = mesh.tris_by_material.get(name)
         if not tris:
             continue
-        payload = struct.pack("<i", material_id)
+        payload = bytearray(struct.pack("<i", material_id))
         for tri in tris:
-            payload += struct.pack("<III", tri[0], tri[1], tri[2])
-        mesh_payload += chunk("TRIS", payload)
+            payload.extend(struct.pack("<III", tri[0], tri[1], tri[2]))
+        mesh_payload.extend(chunk("TRIS", bytes(payload)))
 
-    node_payload = cstr("caramelo_pet")
-    node_payload += struct.pack("<fff", 0.0, 0.0, 0.0)
-    node_payload += struct.pack("<fff", 1.0, 1.0, 1.0)
-    node_payload += struct.pack("<ffff", 1.0, 0.0, 0.0, 0.0)
-    node_payload += chunk("MESH", mesh_payload)
+    node_payload = bytearray(cstr("caramelo_pet"))
+    node_payload.extend(struct.pack("<fff", 0.0, 0.0, 0.0))
+    node_payload.extend(struct.pack("<fff", 1.0, 1.0, 1.0))
+    node_payload.extend(struct.pack("<ffff", 1.0, 0.0, 0.0, 0.0))
+    node_payload.extend(chunk("MESH", bytes(mesh_payload)))
 
-    bb3d = struct.pack("<I", 1)
-    bb3d += chunk("BRUS", brus)
-    bb3d += chunk("NODE", node_payload)
-    path.write_bytes(chunk("BB3D", bb3d))
+    bb3d = bytearray(struct.pack("<I", 1))
+    bb3d.extend(chunk("BRUS", bytes(brus)))
+    bb3d.extend(chunk("NODE", bytes(node_payload)))
+    path.write_bytes(chunk("BB3D", bytes(bb3d)))
 
 
 def update_kart_xml(kart_xml, character, model_file):
@@ -468,12 +532,20 @@ def prepare_assets(repo_root, assets_path, force):
         shutil.copytree(source, target)
         partner = CHARACTERS[DEFAULT_PARTNERS[ident]]
         model_file = f"{ident}_duo_kart.b3d"
+        style = KART_STYLES[ident]
         colors = {
             **KART_COLORS,
             **prefixed_colors("front_", character["colors"]),
             **prefixed_colors("rear_", partner["colors"]),
         }
-        write_b3d(target / model_file, build_team_kart_mesh(character, partner), colors)
+        colors.update({
+            "kart_body": style["body"],
+            "kart_body_dark": style["body_dark"],
+            "kart_nose": style["nose"],
+            "kart_trim": style["trim"],
+            "kart_plate": style["accent"],
+        })
+        write_b3d(target / model_file, build_team_kart_mesh(character, partner, style), colors)
         copy_icon(repo_root, target, ident)
         update_kart_xml(target / "kart.xml", character, model_file)
         print(f"Prepared {character['name']} with {model_file}.")
