@@ -24,6 +24,7 @@ CHARACTERS = {
             "ear": (0.55, 0.20, 0.10, 1.0),
             "whisker": (0.86, 0.86, 0.78, 1.0),
             "scar": (0.95, 0.28, 0.20, 1.0),
+            "white": (1.0, 0.96, 0.78, 1.0),
         },
         "scale": 0.92,
     },
@@ -362,74 +363,66 @@ def build_pet_mesh(character):
         return (x * scale, y * scale, z * scale)
 
     name = character["name"]
-    body_radius = (0.40, 0.25, 0.58) if kind == "cat" else (0.43, 0.27, 0.62)
-    head_radius = (0.34, 0.30, 0.29)
-    if name == "Atho":
-        body_radius = (0.38, 0.24, 0.55)
-        head_radius = (0.35, 0.29, 0.27)
-    elif name == "Popo":
-        body_radius = (0.52, 0.34, 0.58)
-        head_radius = (0.38, 0.33, 0.30)
-    elif name == "Favela":
-        body_radius = (0.48, 0.30, 0.66)
-        head_radius = (0.38, 0.32, 0.32)
-    elif name == "Nina":
-        body_radius = (0.52, 0.31, 0.70)
-        head_radius = (0.38, 0.32, 0.32)
+    chubby = name == "Popo"
+    large = name == "Nina"
+    body_radius = (0.42, 0.34, 0.28) if kind == "cat" else (0.46, 0.35, 0.30)
+    head_radius = (0.43, 0.39, 0.34) if kind == "cat" else (0.46, 0.39, 0.36)
+    if chubby:
+        body_radius = (0.58, 0.43, 0.34)
+        head_radius = (0.48, 0.42, 0.35)
+    elif large:
+        body_radius = (0.55, 0.40, 0.35)
+        head_radius = (0.49, 0.40, 0.37)
 
-    body_y = 0.43 if kind == "cat" else 0.42
-    head_y = 0.84 if kind == "cat" else 0.82
-    add_ellipsoid(mesh, "body", sc((0.0, body_y, -0.13)), sc(body_radius), 12, 22)
-    add_ellipsoid(mesh, "belly", sc((0.0, body_y - 0.02, 0.36)), sc((body_radius[0] * 0.64, body_radius[1] * 0.82, 0.065)), 7, 16)
-    add_ellipsoid(mesh, "body", sc((0.0, head_y, 0.34)), sc(head_radius), 12, 22)
+    add_ellipsoid(mesh, "body", sc((0.0, 0.42, -0.03)), sc(body_radius), 12, 22)
+    add_ellipsoid(mesh, "belly", sc((0.0, 0.42, 0.24)), sc((body_radius[0] * 0.60, body_radius[1] * 0.72, 0.060)), 6, 14)
+    add_ellipsoid(mesh, "body", sc((0.0, 0.96, 0.20)), sc(head_radius), 14, 24)
 
-    leg_height = 0.20 if kind == "cat" else 0.24
-    paw_material = "nose" if kind == "cat" else None
+    # Big, high-contrast driver paws read as hands gripping the kart.
     for side in (-1, 1):
-        add_ellipsoid(mesh, "body", sc((side * (0.21 if kind == "cat" else 0.25), 0.20, 0.27)), sc((0.055, leg_height, 0.055)), 6, 10)
-        add_cartoon_paw(mesh, "body", sc((side * (0.21 if kind == "cat" else 0.25), 0.04, 0.38)), scale, paw_material)
-        add_ellipsoid(mesh, "body", sc((side * (0.26 if kind == "cat" else 0.30), 0.19, -0.36)), sc((0.07, leg_height * 0.85, 0.07)), 6, 10)
-        add_cartoon_paw(mesh, "body", sc((side * (0.26 if kind == "cat" else 0.30), 0.04, -0.25)), scale, paw_material)
+        add_ellipsoid(mesh, "body", sc((side * 0.34, 0.42, 0.36)), sc((0.095, 0.075, 0.115)), 5, 12)
+        add_ellipsoid(mesh, "body", sc((side * 0.27, 0.18, 0.12)), sc((0.12, 0.055, 0.15)), 5, 12)
 
     if kind == "cat":
-        add_cone(mesh, "body", sc((-0.20, 1.04, 0.30)), 0.14 * scale, 0.35 * scale, tilt_x=-0.055 * scale)
-        add_cone(mesh, "body", sc((0.20, 1.04, 0.30)), 0.14 * scale, 0.35 * scale, tilt_x=0.055 * scale)
-        add_cone(mesh, "ear", sc((-0.20, 1.055, 0.305)), 0.073 * scale, 0.21 * scale, tilt_x=-0.030 * scale)
-        add_cone(mesh, "ear", sc((0.20, 1.055, 0.305)), 0.073 * scale, 0.21 * scale, tilt_x=0.030 * scale)
-        add_tail(mesh, "body", sc((0.0, 0.52, -0.62)), 0.70 * scale, 0.66 * scale, 0.052 * scale)
-        add_whiskers(mesh, "whisker", scale, y=0.77, z=0.62, length=0.30 if name == "Popo" else 0.38)
+        add_cone(mesh, "body", sc((-0.27, 1.25, 0.13)), 0.18 * scale, 0.43 * scale, tilt_x=-0.070 * scale)
+        add_cone(mesh, "body", sc((0.27, 1.25, 0.13)), 0.18 * scale, 0.43 * scale, tilt_x=0.070 * scale)
+        add_cone(mesh, "ear", sc((-0.27, 1.27, 0.14)), 0.095 * scale, 0.25 * scale, tilt_x=-0.040 * scale)
+        add_cone(mesh, "ear", sc((0.27, 1.27, 0.14)), 0.095 * scale, 0.25 * scale, tilt_x=0.040 * scale)
+        add_tail(mesh, "body", sc((0.0, 0.44, -0.31)), 0.45 * scale, 0.55 * scale, 0.058 * scale)
+        add_whiskers(mesh, "whisker", scale, y=0.93, z=0.52, length=0.40 if name == "Atho" else 0.32)
     else:
-        add_ellipsoid(mesh, "ear", sc((-0.32, 0.84, 0.26)), sc((0.10, 0.24, 0.075)), 8, 14)
-        add_ellipsoid(mesh, "ear", sc((0.32, 0.84, 0.26)), sc((0.10, 0.24, 0.075)), 8, 14)
-        add_tail(mesh, "body", sc((0.0, 0.50, -0.68)), 0.58 * scale, 0.30 * scale, 0.070 * scale)
+        add_ellipsoid(mesh, "ear", sc((-0.38, 0.96, 0.10)), sc((0.12, 0.30, 0.085)), 8, 14)
+        add_ellipsoid(mesh, "ear", sc((0.38, 0.96, 0.10)), sc((0.12, 0.30, 0.085)), 8, 14)
+        add_tail(mesh, "body", sc((0.0, 0.42, -0.34)), 0.36 * scale, 0.24 * scale, 0.070 * scale)
 
-    add_ellipsoid(mesh, "muzzle" if "muzzle" in colors else "belly", sc((0.0, 0.74, 0.61)), sc((0.18 if kind == "dog" else 0.12, 0.09, 0.105)), 7, 14)
-    add_ellipsoid(mesh, "nose", sc((0.0, 0.76, 0.705)), sc((0.088 if kind == "dog" else 0.060, 0.048, 0.040)), 5, 12)
-    add_eye_pair(mesh, "eye", sc((0.0, 0.89, 0.56)), 0.28 * scale if kind == "cat" else 0.25 * scale)
-    add_pupil_pair(mesh, "pupil", sc((0.0, 0.89, 0.575)), 0.28 * scale if kind == "cat" else 0.25 * scale)
+    add_ellipsoid(mesh, "muzzle" if "muzzle" in colors else "belly", sc((0.0, 0.88, 0.54)), sc((0.23 if kind == "dog" else 0.17, 0.12, 0.12)), 7, 16)
+    add_ellipsoid(mesh, "nose", sc((0.0, 0.91, 0.66)), sc((0.105 if kind == "dog" else 0.075, 0.060, 0.045)), 5, 12)
+    add_eye_pair(mesh, "eye", sc((0.0, 1.04, 0.49)), 0.38 * scale if kind == "cat" else 0.34 * scale)
+    add_pupil_pair(mesh, "pupil", sc((0.0, 1.04, 0.515)), 0.38 * scale if kind == "cat" else 0.34 * scale)
+    add_ellipsoid(mesh, "white", sc((-0.08, 1.14, 0.56)), sc((0.050, 0.040, 0.018)), 3, 8)
 
     if "collar" in colors:
-        add_ellipsoid(mesh, "collar", sc((0.0, 0.62, 0.37)), sc((0.34, 0.035, 0.25)), 5, 16)
+        add_ellipsoid(mesh, "collar", sc((0.0, 0.67, 0.22)), sc((0.38, 0.040, 0.22)), 5, 16)
 
     if name == "Atho":
-        add_ellipsoid(mesh, "scar", sc((0.0, 0.80, 0.72)), sc((0.060, 0.012, 0.012)), 3, 8)
-        add_ellipsoid(mesh, "collar", sc((0.0, 0.63, 0.42)), sc((0.34, 0.030, 0.060)), 4, 14)
+        add_ellipsoid(mesh, "collar", sc((0.0, 0.68, 0.31)), sc((0.38, 0.035, 0.060)), 4, 14)
+        add_ellipsoid(mesh, "scar", sc((0.02, 0.91, 0.69)), sc((0.075, 0.014, 0.014)), 3, 8)
     elif name == "Popo":
-        add_ellipsoid(mesh, "white", sc((0.0, 0.82, 0.61)), sc((0.17, 0.20, 0.055)), 6, 12)
-        add_ellipsoid(mesh, "patch_a", sc((-0.15, 0.92, 0.58)), sc((0.18, 0.18, 0.050)), 6, 12)
-        add_ellipsoid(mesh, "patch_b", sc((0.17, 0.93, 0.56)), sc((0.17, 0.18, 0.050)), 6, 12)
-        add_ellipsoid(mesh, "patch_b", sc((-0.20, 0.47, 0.33)), sc((0.20, 0.18, 0.050)), 5, 12)
-        add_ellipsoid(mesh, "patch_a", sc((0.23, 0.43, 0.11)), sc((0.17, 0.14, 0.045)), 5, 12)
+        add_ellipsoid(mesh, "white", sc((0.0, 0.98, 0.54)), sc((0.20, 0.24, 0.058)), 6, 14)
+        add_ellipsoid(mesh, "patch_a", sc((-0.20, 1.07, 0.50)), sc((0.21, 0.20, 0.055)), 6, 14)
+        add_ellipsoid(mesh, "patch_b", sc((0.22, 1.08, 0.49)), sc((0.22, 0.20, 0.055)), 6, 14)
+        add_ellipsoid(mesh, "patch_b", sc((-0.28, 0.48, 0.25)), sc((0.24, 0.18, 0.050)), 5, 12)
+        add_ellipsoid(mesh, "patch_a", sc((0.28, 0.42, 0.08)), sc((0.20, 0.15, 0.045)), 5, 12)
     elif name == "Favela":
-        add_ellipsoid(mesh, "white", sc((0.0, 0.40, 0.40)), sc((0.18, 0.23, 0.055)), 5, 12)
-        add_ellipsoid(mesh, "tongue", sc((-0.04, 0.66, 0.72)), sc((0.048, 0.105, 0.030)), 5, 10)
+        add_ellipsoid(mesh, "white", sc((0.0, 0.39, 0.28)), sc((0.22, 0.25, 0.060)), 5, 12)
+        add_ellipsoid(mesh, "tongue", sc((-0.04, 0.78, 0.66)), sc((0.052, 0.120, 0.032)), 5, 10)
     elif name == "Nina":
-        add_ellipsoid(mesh, "muzzle", sc((0.0, 0.72, 0.67)), sc((0.18, 0.09, 0.065)), 6, 12)
-        add_ellipsoid(mesh, "eyebrow", sc((-0.14, 1.00, 0.59)), sc((0.065, 0.030, 0.020)), 4, 8)
-        add_ellipsoid(mesh, "eyebrow", sc((0.14, 1.00, 0.59)), sc((0.065, 0.030, 0.020)), 4, 8)
-        add_ellipsoid(mesh, "white", sc((0.0, 0.38, 0.40)), sc((0.15, 0.20, 0.050)), 5, 12)
-        add_ellipsoid(mesh, "patch_a", sc((-0.23, 0.14, 0.22)), sc((0.08, 0.05, 0.09)), 4, 10)
-        add_ellipsoid(mesh, "patch_a", sc((0.23, 0.14, 0.22)), sc((0.08, 0.05, 0.09)), 4, 10)
+        add_ellipsoid(mesh, "muzzle", sc((0.0, 0.87, 0.60)), sc((0.22, 0.11, 0.070)), 6, 14)
+        add_ellipsoid(mesh, "eyebrow", sc((-0.17, 1.17, 0.52)), sc((0.075, 0.035, 0.023)), 4, 8)
+        add_ellipsoid(mesh, "eyebrow", sc((0.17, 1.17, 0.52)), sc((0.075, 0.035, 0.023)), 4, 8)
+        add_ellipsoid(mesh, "white", sc((0.0, 0.38, 0.28)), sc((0.18, 0.22, 0.055)), 5, 12)
+        add_ellipsoid(mesh, "patch_a", sc((-0.30, 0.22, 0.12)), sc((0.10, 0.06, 0.10)), 4, 10)
+        add_ellipsoid(mesh, "patch_a", sc((0.30, 0.22, 0.12)), sc((0.10, 0.06, 0.10)), 4, 10)
 
     return mesh
 
@@ -437,8 +430,8 @@ def build_pet_mesh(character):
 def build_team_kart_mesh(character, partner, style=None):
     mesh = Mesh()
     add_kart_shell(mesh, style)
-    merge_mesh(mesh, build_pet_mesh(character), offset=(0.0, 0.42, 0.18), scale=0.44, material_prefix="front_")
-    merge_mesh(mesh, build_pet_mesh(partner), offset=(0.0, 0.45, -0.37), scale=0.37, material_prefix="rear_")
+    merge_mesh(mesh, build_pet_mesh(character), offset=(0.0, 0.47, 0.24), scale=0.58, material_prefix="front_")
+    merge_mesh(mesh, build_pet_mesh(partner), offset=(0.0, 0.50, -0.38), scale=0.49, material_prefix="rear_")
     return mesh
 
 
