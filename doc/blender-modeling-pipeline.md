@@ -38,6 +38,30 @@ Open the `.blend` file and sculpt/refine the collections:
 - `04_favela_caramel_dog`
 - `05_nina_dark_dog`
 
+## Mascot Arcade Direction
+
+The next visual direction is not realistic pets. Build one mascot at a time:
+
+- biped body;
+- oversized head, eyes, hands, and feet;
+- compact torso;
+- strong readable color blocks;
+- simple accessories;
+- selection-screen silhouette first, gameplay detail second.
+
+Start with Favela:
+
+```powershell
+blender --background --python art\blender\create_favela_arcade_mascot.py
+```
+
+Output:
+
+```text
+art/blender/generated/favela_arcade_mascot.blend
+art/blender/generated/favela_arcade_mascot_preview.png
+```
+
 ## Modeling Rules
 
 - Keep silhouettes readable from the kart select camera.
